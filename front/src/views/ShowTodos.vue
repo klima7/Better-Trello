@@ -29,7 +29,6 @@ export default {
     },
   },
   created() {
-    alert(process.env.VUE_APP_LOCAL)
     this.fetchTodos()
   }
 }
