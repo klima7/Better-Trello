@@ -1,3 +1,5 @@
+from flask_cors import cross_origin
+
 from app import app
 from app.models import *
 from flask import request

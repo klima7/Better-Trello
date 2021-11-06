@@ -1,3 +1,6 @@
 module.exports = {
-    publicPath: '/Trello-Sierra/'
+    publicPath: '/Trello-Sierra/',
+    devServer: {
+        proxy: 'http://localhost:5000'
+    }
 }

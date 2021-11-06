@@ -16,12 +16,12 @@ export default {
           alert(res.data)
         })
         .catch((error) => {
-          console.error(error);
+          alert(error);
         });
     },
   },
   created() {
-    this.performRequest()
+    // this.performRequest()
   }
 }
 </script>
