@@ -1,4 +1,4 @@
-# Trello
+# Trello Sierra
 Web application that is meant to implement basic functionlity found in list-making application Trello.
 
 ## Environment setup
@@ -17,8 +17,6 @@ sudo apt update
 sudo add-apt-repository ppa:deadsnakes/ppa
 # Install Python
 sudo apt install python3.8
-# Install all required Python packages
-pip install -r requirements.txt
 # Install Node.js
 sudo apt install nodejs
 # Install NPM
@@ -27,10 +25,22 @@ sudo apt install npm
 npm install -g @vue/cli
 ```
 ## Run application
-To run application: clone the repository, install all requirements, go into the main directory and run:
+To run application: install required packages mentioned in the section above. Clone the repository and follow the following steps:
+### Backend run
 ```bash
-# Start frontend
-npm run serve
+# Navigate fo backend directory
+cd back/
+# Install Python packages
+pip install -r requirements.txt
 # Start backend
 python start.py
+```
+### Frontend run
+```bash
+# Navigate fo frontend directory
+cd front/
+# Install Node packages
+npm install
+# Start frontend
+npm run serve
 ```
