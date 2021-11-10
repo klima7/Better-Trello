@@ -1,7 +1,10 @@
 <template>
-  <div class="about">
+  <div class="about pa-8">
     <ul>
-      <li style="list-style-type: none;" v-for="todo in todos" :key="todo">{{ todo.content }}</li>
+      <v-card
+        v-for="todo in todos" :key="todo"
+        class="pa-2 mt-2"
+      >{{ todo.content }}</v-card>
     </ul>
   </div>
 </template>
