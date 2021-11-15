@@ -10,9 +10,6 @@
 </template>
 
 <script>
-import axios from 'axios';
-import constants from '../constants.js'
-
 export default {
   data() {
     return {
@@ -21,8 +18,8 @@ export default {
   },
   methods: {
     fetchTodos() {
-      const path = constants.BACKEND_URL+'/todos';
-      axios.get(path)
+      const path = '/todos';
+      this.axios.get(path)
         .then((res) => {
           this.todos = res.data
         })

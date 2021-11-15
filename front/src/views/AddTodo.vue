@@ -23,7 +23,6 @@
 
 <script>
 import axios from 'axios';
-import constants from '../constants.js'
 
 export default {
   data() {
@@ -37,7 +36,7 @@ export default {
       this.addTodo(todo);
     },
     addTodo(todo) {
-      const path = constants.BACKEND_URL+'/todos';
+      const path = '/todos';
       axios.post(path, todo)
       // eslint-disable-next-line no-unused-vars
       .then((_res) => {
