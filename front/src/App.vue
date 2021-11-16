@@ -41,6 +41,14 @@
         <span class="mr-2">Add todo</span>
         <v-icon>mdi-plus-circle</v-icon>
       </v-btn>
+      
+      <v-btn
+        to="/listboards"
+        text
+      >
+        <span class="mr-2">Board list</span>
+        <v-icon>mdi-format-list-checkbox</v-icon>
+      </v-btn>
 
     </v-app-bar>
 

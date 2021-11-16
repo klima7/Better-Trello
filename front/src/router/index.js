@@ -2,6 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import AddTodo from '../views/AddTodo.vue'
 import ShowTodos from '../views/ShowTodos.vue'
+import ListBoards from '../views/ListBoards.vue'
 
 Vue.use(VueRouter)
 
@@ -15,6 +16,11 @@ const routes = [
     path: '/addtodo',
     name: 'Add Todo',
     component: AddTodo
+  },
+  {
+    path: '/listboards',
+    name: 'List boards',
+    component: ListBoards
   },
 ]
 
