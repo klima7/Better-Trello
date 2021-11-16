@@ -13,6 +13,7 @@ def index():
 
 @app.route('/todos', methods=['POST'])
 def add_todo():
+    print('add_todo', request.authorization, request.headers.get('Authorization'))
     data = request.json
     teacher = Todo(content=data['content'])
     db.session.add(teacher)
@@ -22,6 +23,7 @@ def add_todo():
 
 @app.route('/todos', methods=['GET'])
 def get_todos():
+    print('get_todos', request.authorization, request.headers.get('Authorization'))
     todos = Todo.query.all()
     todos_json = [todo.to_json() for todo in todos]
     return jsonify(todos_json)

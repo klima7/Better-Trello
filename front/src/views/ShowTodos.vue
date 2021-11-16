@@ -2,7 +2,7 @@
   <div class="about pa-8">
     <ul>
       <v-card
-        v-for="todo in todos" :key="todo"
+        v-for="todo in todos" :key="todo.content"
         class="pa-2 mt-2"
       >{{ todo.content }}</v-card>
     </ul>

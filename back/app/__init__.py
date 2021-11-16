@@ -13,3 +13,6 @@ from app.models import *
 db.create_all()
 
 from app import routes
+
+from .auth import auth as auth_blueprint
+app.register_blueprint(auth_blueprint, url_prefix='/auth/')
