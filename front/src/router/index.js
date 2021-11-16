@@ -18,10 +18,10 @@ const routes = [
   },
 ]
 
-const router = new VueRouter({
+Vue.router = new VueRouter({
   mode: "history",
   base: '/Trello-Sierra/',
   routes
 })
 
-export default router
+export default Vue.router
