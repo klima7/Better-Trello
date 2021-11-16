@@ -1,21 +1,20 @@
 import Vue from 'vue'
-import axios from 'axios'
-import VueAxios from 'vue-axios'
 import App from './App.vue'
 import router from './router'
 import store from './store'
 import vuetify from './plugins/vuetify'
+import http from './http'
 
 Vue.config.productionTip = false
 
-axios.defaults.baseURL = process.env.VUE_APP_BACKEND_URL
-Vue.use(VueAxios, axios)
-
 new Vue({
-  router,
-  store,
-  vuetify,
+  el: '#app',
+  http: http,
+  router: router,
+  store: store,
+  vuetify: vuetify,
   render: h => h(App),
+
   created () {
     if (sessionStorage.redirect) {
         const redirect = sessionStorage.redirect
@@ -23,4 +22,4 @@ new Vue({
         this.$router.push(redirect)
     }
 }
-}).$mount('#app')
+});
