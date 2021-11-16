@@ -79,7 +79,7 @@ export default {
 
     login() {
       this.$auth.login({
-        headers: {'Authorization': 'Basic ' + btoa('hello@example.com:password')},
+        data: {login: 'ukasz.klimkiewicz@gmail.com', password: '12345678'},
         redirect: {name: 'redirect'},
         remember: 'Rob',
         staySignedIn: true,

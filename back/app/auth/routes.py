@@ -1,16 +1,20 @@
 from . import auth
-from flask import jsonify, request, abort
+from flask import jsonify, request, abort, current_app
+import jwt
 
 
 @auth.route('/login', methods=['POST'])
 def login():
-    print('auth', request.authorization)
-    username = request.authorization.username
-    password = request.authorization.password
-    if password != 'password':
-        return abort(400, 'Invalid credentials')
+    if 'login' not in request.json or 'password' not in request.json:
+        return abort(400, 'Credentials not supplied')
+
+    login = request.json['login']
+    password = request.json['password']
+
+    token = jwt.encode({'login': login, 'password': password}, current_app.config['SECRET_KEY'])
+
     resp = jsonify()
-    resp.headers['Authorization'] = request.headers.get('Authorization')
+    resp.headers['Authorization'] = 'Bearer: ' + token
     return resp
 
 
