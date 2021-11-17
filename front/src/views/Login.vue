@@ -7,13 +7,16 @@
                 <v-toolbar-title>Login Form</v-toolbar-title>
                 </v-toolbar>
                 <v-card-text>
-                <v-form lazy-validation>
+                <v-form ref="form" v-model="isValid" validation>
                     <v-text-field
                         prepend-icon="mdi-at"
                         name="email"
                         label="Email"
                         type="text"
                         v-model="email"
+                        clearable
+                        :rules="emailRules"
+                        required
                     ></v-text-field>
                     <v-text-field
                         id="password"
@@ -22,6 +25,9 @@
                         label="Password"
                         type="password"
                         v-model="password"
+                        clearable
+                        :rules="passwordRules"
+                        required
                     ></v-text-field>
                     <v-switch
                         v-model="rememberMe"
@@ -31,7 +37,15 @@
                 </v-card-text>
                 <v-card-actions class="pa-5">
                 <v-spacer></v-spacer>
-                <v-btn color="primary" @click="loginClicked">Login</v-btn>
+                <v-btn 
+                    color="primary" 
+                    @click="resetClicked"
+                    >Reset</v-btn>
+                <v-btn 
+                    color="primary" 
+                    @click="loginClicked"
+                    :disabled="!isValid"
+                    >Login</v-btn>
                 </v-card-actions>
             </v-card>
         </v-flex>
@@ -46,14 +60,28 @@ export default {
             email: "",
             password: "",
             rememberMe: false,
+            isValid: false,
+
+            emailRules: [
+                v => !!v || 'Email is required'
+            ],
+            passwordRules: [
+                v => !!v || 'Password is required'
+            ]
         }
     },
 
     methods: {
 
         loginClicked() {
-            alert("Login clicked " + this.rememberMe)
+            if(this.$refs.form.validate()) {
+                alert("form is valid")
+            }
         },
+
+        resetClicked() {
+            this.$refs.form.reset();
+        }
     }
 };
 </script>
