@@ -2,7 +2,7 @@
     <v-container fluid>
     <v-layout align-center justify-center>
         <v-flex xs12 sm8 md4>
-            <v-card class="elevation-12 mt-12">
+            <v-card class="elevation-4 mt-12">
                 <v-toolbar dark color="primary">
                 <v-toolbar-title>Login Form</v-toolbar-title>
                 </v-toolbar>
