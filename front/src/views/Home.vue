@@ -2,9 +2,9 @@
     <v-container>
         <v-row justify="center mt-6">
             <v-img
-                max-height="300"
-                max-width="300"
+                height="300"
                 src="https://avatars.slack-edge.com/2021-07-19/2282472048054_9a51d280179d828b3ad7_512.png"
+                contain
                 ></v-img>
         </v-row>
         <v-row justify="center">
