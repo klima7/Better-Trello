@@ -5,6 +5,7 @@ import store from './store'
 import vuetify from './plugins/vuetify'
 import http from './http'
 import config from './config'
+import './assets/css/main.css'; // global styles
 
 Vue.config.productionTip = false
 
