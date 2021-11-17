@@ -4,6 +4,8 @@
       color="primary"
       dark
     >
+
+      <!-- logo -->
       <div class="d-flex">
         <v-img
           alt="Vuetify Logo"
@@ -19,22 +21,29 @@
 
       </div>
 
-      <v-btn
-        to="/"
-        class="ml-8"
-        text
-      >
-        <span class="mr-2">Todos list</span>
-        <v-icon>mdi-format-list-checkbox</v-icon>
-      </v-btn>
+      <v-spacer />
 
-      <v-btn
-        to="/addtodo"
-        text
-      >
-        <span class="mr-2">Add todo</span>
-        <v-icon>mdi-plus-circle</v-icon>
-      </v-btn>
+      <!-- authentication buttons -->
+      <div>
+
+        <!-- login button -->
+        <v-btn
+          to="/"
+          class="mr-2"
+          text
+        >
+          <span>Login</span>
+        </v-btn>
+
+        <!-- register button -->
+        <v-btn
+          to="/addtodo"
+          text
+        >
+          <span>Register</span>
+        </v-btn>
+
+      </div>
 
     </v-app-bar>
 </template>
