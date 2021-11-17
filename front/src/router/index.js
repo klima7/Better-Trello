@@ -1,26 +1,26 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import AddTodo from '../views/AddTodo.vue'
-import ShowTodos from '../views/ShowTodos.vue'
-import Redirect from '../views/Redirect.vue'
+import Home from '../views/Home.vue'
+import Login from '../views/Login.vue'
+import Register from '../views/Register.vue'
 
 Vue.use(VueRouter)
 
 const routes = [
   {
     path: '/',
-    name: 'Show Todos',
-    component: ShowTodos
+    name: 'Home',
+    component: Home
   },
   {
-    path: '/addtodo',
-    name: 'Add Todo',
-    component: AddTodo
+    path: '/login',
+    name: 'login',
+    component: Login
   },
   {
-    path: '/redirect',
-    name: 'redirect',
-    component: Redirect
+    path: '/register',
+    name: 'register',
+    component: Register
   },
 ]
 

@@ -28,7 +28,7 @@
 
         <!-- login button -->
         <v-btn
-          to="/"
+          to="/login"
           class="mr-2"
           text
         >
@@ -37,7 +37,7 @@
 
         <!-- register button -->
         <v-btn
-          to="/addtodo"
+          to="/register"
           text
         >
           <span>Register</span>
