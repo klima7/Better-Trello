@@ -10,6 +10,7 @@
 
 <script>
 import AppBar from './components/AppBar.vue'
+import '@lottiefiles/lottie-player';
 
 export default {
   name: 'Trello',
