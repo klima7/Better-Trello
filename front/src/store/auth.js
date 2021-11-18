@@ -1,54 +1,86 @@
-import Vue from 'vue'
+import Vue from 'vue';
 
 export default {
-    state: () => ({
-        status: '',
-        token: localStorage.getItem('token') || '',
-        user: {}
-    }),
-
-    mutations: {
-      auth_request(state) {
-        state.status = 'loading'
-      },
-      auth_success(state, token, user) {
-        state.status = 'success'
-        state.token = token
-        state.user = user
-      },
-      auth_error(state) {
-        state.status = 'error'
-      },
-      logout(state) {
-        state.status = ''
-        state.token = ''
-      },
+    state() {
+        return {
+            
+        };
     },
 
     actions: {
-      register({ commit }, user) {
-        return new Promise((resolve, reject) => {
-          commit('auth_request')
-          Vue.axios.post('/auth/register', user)
-            .then(resp => {
-              const token = resp.data.token
-              const user = resp.data.user
-              localStorage.setItem('token', token)
-              // Add the following line:
-              Vue.axios.defaults.headers.common['Authorization'] = token
-              commit('auth_success', token, user)
-              resolve(resp)
-            })
-            .catch(err => {
-              commit('auth_error', err)
-              localStorage.removeItem('token')
-              reject(err)
-            })
-        })
-      },
+        fetch(data) {
+            return Vue.auth.fetch(data);
+        },
+
+        refresh(data) {
+            return Vue.auth.refresh(data);
+        },
+
+        login(ctx, data) {
+            return new Promise((resolve, reject) => {
+                Vue.auth.login({
+                    url: 'auth/login',
+                    data: data,
+                    remember: true,
+                    staySignedIn: true,
+                })
+                .then((res) => {
+                    if (data.remember) {
+                        Vue.auth.remember(JSON.stringify({
+                            name: ctx.getters.user.first_name
+                        }));
+                    }
+
+                    Vue.router.push({
+                        name: ctx.getters.user.type + '-landing'
+                    });
+
+                    resolve(res);
+                }, reject);
+            });
+        },
+
+        register(ctx, data) {
+            data = data || {};
+
+            return new Promise((resolve, reject) => {
+                Vue.auth.register({
+                    data: data,
+                    staySignedIn: true,
+                    autoLogin: true,
+                    fetchUser: true,
+                })
+                .then((res) => {
+                    if (data.autoLogin) {
+                        ctx.dispatch('login', data).then(resolve, reject);
+                    }
+                }, reject);
+            });
+        },
+
+        impersonate(ctx, data) {
+            var props = this.getters['properties/data'];
+
+            Vue.auth.impersonate({
+                url: 'auth/' + data.user.id + '/impersonate',
+                redirect: 'user-account'
+            });
+        },
+
+        unimpersonate(ctx) {
+            Vue.auth.unimpersonate({
+                redirect: 'admin-users'
+            });
+        },    
+
+        logout(ctx) {
+            return Vue.auth.logout();
+        },
     },
 
     getters: {
-
-    },
+        user() {
+            return Vue.auth.user();
+        },
+    }
 }

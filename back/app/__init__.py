@@ -9,7 +9,7 @@ app = Flask(__name__)
 app.config.from_object(Config)
 
 # CORS setup
-CORS(app, resources={r'/*': {'origins': '*'}})
+CORS(app)
 
 # Extensions initialization
 db = SQLAlchemy(app)

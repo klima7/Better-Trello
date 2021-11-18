@@ -8,3 +8,4 @@ class Config(object):
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SECRET_KEY = 'very-secret-key'
     CORS_EXPOSE_HEADERS = ['Authorization']
+    CORS_SEND_WILDCARD = True

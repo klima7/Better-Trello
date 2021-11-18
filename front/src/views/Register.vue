@@ -94,20 +94,23 @@ export default {
             }
         },
 
-        register(email, password) {
+        register(email, password, remember) {
             let data = {
                 email: email,
                 password: password,
             };
 
             this.$store
-                .dispatch("register", data)
-                .then(() => this.$router.push("/boards"))
-                .catch(err => console.log(err));
+                .dispatch('register', data)
+                .then(() => {
+                    console.log('success')
+                }, (res) => {
+                    console.log(res)
+                });
         },
 
         test() {
-            this.register('ukasz.klimkiewicz@gmail.com', 'KotAdolf')
+            this.register('ukasz24.klimkasdfiewiczsdfdfasdf24@gmail.com', 'KotAdosdflf')
         },
 
         resetClicked() {
