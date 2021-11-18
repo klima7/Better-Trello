@@ -3,7 +3,6 @@ import Vue from 'vue'
 import auth                  from '@websanova/vue-auth/src/v2.js';
 import driverAuthBasic      from '@websanova/vue-auth/src/drivers/auth/bearer.js';
 import driverHttpAxios       from '@websanova/vue-auth/src/drivers/http/axios.1.x.js';
-// import driverHttpVueResource from '@websanova/vue-auth/src/drivers/http/vue-resource.1.x.js';
 import driverRouterVueRouter from '@websanova/vue-auth/src/drivers/router/vue-router.2.x.js';
 import driverOAuth2Google    from '@websanova/vue-auth/src/drivers/oauth2/google.js';
 import driverOAuth2Facebook  from '@websanova/vue-auth/src/drivers/oauth2/facebook.js';
@@ -13,14 +12,12 @@ driverOAuth2Facebook.params.client_id = '196729390739201';
 
 Vue.use(auth, {
     plugins: {
-        http: Vue.axios, // Axios
-        // http: Vue.http, // Vue Resource
+        http: Vue.axios,
         router: Vue.router,
     },
     drivers: {
         auth: driverAuthBasic,
-        http: driverHttpAxios, // Axios
-        // http: driverHttpVueResource, // Vue Resource
+        http: driverHttpAxios,
         router: driverRouterVueRouter,
         oauth2: {
             google: driverOAuth2Google,
@@ -32,6 +29,10 @@ Vue.use(auth, {
         notFoundRedirect: {name: 'user-account'},
         parseUserData(data) {
             return data;
+        },
+        refreshData: { 
+            enabled: false, 
+            interval: 0
         },
     },
 });
