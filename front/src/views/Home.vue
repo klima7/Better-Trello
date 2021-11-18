@@ -4,6 +4,7 @@
             <v-img
                 height="300"
                 src="https://avatars.slack-edge.com/2021-07-19/2282472048054_9a51d280179d828b3ad7_512.png"
+                transition="scale-transition"
                 contain
                 ></v-img>
         </v-row>

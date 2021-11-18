@@ -14,13 +14,16 @@ export default {
     },
 
     login(ctx, data) {
+      var redirect = Vue.auth.redirect();
       return new Promise((resolve, reject) => {
         Vue.auth.login({
           data: {
             email: data.email,
             password: data.password,
           },
-          redirect: null,
+          redirect: {
+            name: redirect ? redirect.from.name : 'boards'
+          },
           staySignedIn: data.rememberMe,
         })
         .then(resolve, reject);
@@ -49,7 +52,9 @@ export default {
     },
 
     logout(ctx) {
-      return Vue.auth.logout();
+      return Vue.auth.logout({
+        redirect: 'logout'
+      })
     },
 },
 
@@ -57,6 +62,9 @@ export default {
     user() {
       return Vue.auth.user();
     },
+    isLogged() {
+      return Vue.auth.user() != null;
+    }
   }
 
 }

@@ -7,7 +7,7 @@
 
       <!-- logo -->
       <router-link to="/" class='white--text' >
-        <div class="d-flex" @click="goToHome()">
+        <div class="d-flex">
           <v-img
             alt="Vuetify Logo"
             class="shrink mr-2"
@@ -23,8 +23,7 @@
 
       <v-spacer />
 
-      <!-- authentication buttons -->
-      <div>
+      <div v-if="!this.$store.getters.isLogged">
 
         <!-- login button -->
         <v-btn
@@ -45,21 +44,28 @@
 
       </div>
 
+      <!-- logout button -->
+      <div v-else>
+
+        <v-btn
+          @click="logout"
+          text
+        >
+          <span>Logout</span>
+        </v-btn>
+
+      </div>
+
     </v-app-bar>
 </template>
 
 <script>
 export default {
   methods: {
-    goToHome() {
-      this.$router.push({name: 'home'})
+    logout() {
+      console.log('logout')
+      this.$store.dispatch('logout')
     }
   }
 }
 </script>
-
-<style>
-.active {
-  background: transparent;
-}
-</style>

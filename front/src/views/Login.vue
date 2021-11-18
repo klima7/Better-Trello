@@ -38,10 +38,6 @@
             <v-btn color="primary" @click="loginClicked" :disabled="!isValid"
               >Login</v-btn
             >
-            <v-btn 
-                color="primary" 
-                @click="test"
-                >Test</v-btn>
           </v-card-actions>
         </v-card>
       </v-flex>
@@ -86,13 +82,10 @@ export default {
         });
     },
 
-    test() {
-      this.login('ukasz.klimkiewicz@gmail.com', 'KotAdolf')
-    },
-
     resetClicked() {
       this.$refs.form.reset();
     },
+
   },
 };
 </script>

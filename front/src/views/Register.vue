@@ -53,10 +53,6 @@
                 @click="registerClicked"
                 :disabled="!isValid"
                 >Register</v-btn>
-            <v-btn 
-                color="primary" 
-                @click="test"
-                >Test</v-btn>
             </v-card-actions>
           </v-card>
         </v-flex>
@@ -108,10 +104,6 @@ export default {
         }, (res) => {
           console.log('failure')
         });
-    },
-
-    test() {
-      this.register('ukasz43.klimkasdfiewiczsdfdfasdf24@gmail.com', 'KotAdosdflf')
     },
 
     resetClicked() {

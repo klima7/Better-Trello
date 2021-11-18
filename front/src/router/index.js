@@ -12,17 +12,17 @@ const routes = [
   {
     path: '/',
     name: 'home',
-    component: Home
+    component: Home,
   },
   {
     path: '/login',
     name: 'login',
-    component: Login
+    component: Login,
   },
   {
     path: '/register',
     name: 'register',
-    component: Register
+    component: Register,
   },
   {
     path: '/logout',
@@ -32,7 +32,10 @@ const routes = [
   {
     path: '/boards',
     name: 'boards',
-    component: Boards
+    component: Boards,
+    meta: {
+      auth: true
+    },
   },
 ]
 
