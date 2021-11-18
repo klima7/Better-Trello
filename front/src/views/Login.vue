@@ -1,12 +1,17 @@
 <template>
   <v-container fluid>
+    <v-row align="center" justify="center" class="mt-5 mb-12">
+            <v-col cols="12" md="6" align="center" justify="center">
+        <lottie-player src="https://assets7.lottiefiles.com/packages/lf20_87uabjh2.json"  background="transparent"  speed="1" style="width: 70%" loop autoplay></lottie-player>
+      </v-col>
+      <v-col cols="12" md="6">
     <v-layout align-center justify-center>
-      <v-flex xs12 sm8 md4>
-        <v-card class="elevation-4 mt-12">
+      <v-flex>
+        <v-card class="elevation-4 mt-12 ml-6 mr-6">
           <v-toolbar dark color="primary">
-            <v-toolbar-title>Login Form</v-toolbar-title>
+            <v-toolbar-title>Login</v-toolbar-title>
           </v-toolbar>
-          <v-card-text>
+          <v-card-text class="px-8">
             <v-form ref="form" v-model="isValid" validation>
               <v-text-field
                 prepend-icon="mdi-at"
@@ -42,6 +47,8 @@
         </v-card>
       </v-flex>
     </v-layout>
+      </v-col>
+    </v-row>
   </v-container>
 </template>
 
