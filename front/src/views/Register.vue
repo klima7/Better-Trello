@@ -96,6 +96,7 @@ export default {
         v => v.length >= 8 || 'Password must have at lest 8 characters'
       ],
       repeatedPasswordRules: [
+        v => !!v || 'Repeated password is required',
         v => v == this.password || 'Passwords are not the same'
       ]
     }
