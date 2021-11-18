@@ -36,6 +36,9 @@
               ></v-text-field>
               <v-switch v-model="rememberMe" label="Remember Me"></v-switch>
             </v-form>
+            <div class="mt-4">
+              <span class="red--text">{{error}}</span>
+            </div>
           </v-card-text>
           <v-card-actions class="pa-5">
             <v-spacer></v-spacer>
@@ -60,6 +63,7 @@ export default {
       password: "",
       rememberMe: false,
       isValid: false,
+      error: "",
 
       emailRules: [(v) => !!v || "Email is required"],
       passwordRules: [(v) => !!v || "Password is required"],
@@ -82,11 +86,9 @@ export default {
 
       this.$store
         .dispatch('login', data)
-        .then(() => {
-          console.log('login success')
-        }, (res) => {
-          console.log('login failure')
-        });
+        .catch(_ => {
+          this.error = "Invalid email or password"
+        })
     },
 
     resetClicked() {

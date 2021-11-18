@@ -46,6 +46,9 @@
                     required
                 ></v-text-field>
             </v-form>
+            <div class="mt-4">
+              <span class="red--text">{{error}}</span>
+            </div>
             </v-card-text>
             <v-card-actions class="pa-5">
             <v-spacer></v-spacer>
@@ -61,7 +64,6 @@
             </v-card-actions>
           </v-card>
         </v-flex>
-        {{ $store.getters['user'] }}
     </v-layout>
     </v-col>
     </v-row>
@@ -76,6 +78,7 @@ export default {
       password: "",
       repeatedPassword: "",
       isValid: false,
+      error: "",
 
       emailRules: [
         v => !!v || 'Email is required',
@@ -98,7 +101,7 @@ export default {
       }
     },
 
-    register(email, password, remember) {
+    register(email, password) {
       let data = {
         email: email,
         password: password,
@@ -106,10 +109,8 @@ export default {
 
       this.$store
         .dispatch('register', data)
-        .then(() => {
-          console.log('success')
-        }, (res) => {
-          console.log('failure')
+        .catch((_) => {
+          this.error = "User with provided email address already exists"
         });
     },
 
