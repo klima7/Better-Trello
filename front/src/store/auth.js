@@ -1,11 +1,8 @@
-import Vue from 'vue';
+import Vue from "vue";
 
 export default {
-
   state() {
-    return {
-        
-    };
+    return {};
   },
 
   actions: {
@@ -16,17 +13,18 @@ export default {
     login(ctx, data) {
       var redirect = Vue.auth.redirect();
       return new Promise((resolve, reject) => {
-        Vue.auth.login({
-          data: {
-            email: data.email,
-            password: data.password,
-          },
-          redirect: {
-            name: redirect ? redirect.from.name : 'boards'
-          },
-          staySignedIn: data.rememberMe,
-        })
-        .then(resolve, reject);
+        Vue.auth
+          .login({
+            data: {
+              email: data.email,
+              password: data.password,
+            },
+            redirect: {
+              name: redirect ? redirect.from.name : "boards",
+            },
+            staySignedIn: data.rememberMe,
+          })
+          .then(resolve, reject);
       });
     },
 
@@ -34,29 +32,30 @@ export default {
       data = data || {};
 
       return new Promise((resolve, reject) => {
-        Vue.auth.register({
-          data: {
-            email: data.email,
-            password: data.password,
-          },
-          redirect: null,
-          staySignedIn: true,
-          autoLogin: false,
-          fetchUser: true,
-        })
-        .then((res) => {
-          data.rememberMe = false,
-          ctx.dispatch('login', data).then(resolve, reject);
-        }, reject);
+        Vue.auth
+          .register({
+            data: {
+              email: data.email,
+              password: data.password,
+            },
+            redirect: null,
+            staySignedIn: true,
+            autoLogin: false,
+            fetchUser: true,
+          })
+          .then((res) => {
+            (data.rememberMe = false),
+              ctx.dispatch("login", data).then(resolve, reject);
+          }, reject);
       });
     },
 
     logout(ctx) {
       return Vue.auth.logout({
-        redirect: 'logout'
-      })
+        redirect: "logout",
+      });
     },
-},
+  },
 
   getters: {
     user() {
@@ -64,7 +63,6 @@ export default {
     },
     isLogged() {
       return Vue.auth.user() != null;
-    }
-  }
-
-}
+    },
+  },
+};

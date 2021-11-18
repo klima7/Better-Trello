@@ -1,3 +1,3 @@
-import './plugins';
+import "./plugins";
 
 export default {};
