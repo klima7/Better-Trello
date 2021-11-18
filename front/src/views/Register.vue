@@ -53,6 +53,10 @@
                     @click="registerClicked"
                     :disabled="!isValid"
                     >Register</v-btn>
+                <v-btn 
+                    color="primary" 
+                    @click="test"
+                    >Test</v-btn>
                 </v-card-actions>
             </v-card>
         </v-flex>
@@ -86,8 +90,24 @@ export default {
 
         registerClicked() {
             if(this.$refs.form.validate()) {
-                alert("form is valid")
+                this.register(this.email, this.password)
             }
+        },
+
+        register(email, password) {
+            let data = {
+                email: email,
+                password: password,
+            };
+
+            this.$store
+                .dispatch("register", data)
+                .then(() => this.$router.push("/boards"))
+                .catch(err => console.log(err));
+        },
+
+        test() {
+            this.register('ukasz.klimkiewicz@gmail.com', 'KotAdolf')
         },
 
         resetClicked() {

@@ -1,6 +1,8 @@
 from . import authentication
 from .token import encode_token
-from flask import jsonify, request, abort
+from flask import jsonify, request, abort, Response
+from app import db
+from app.models import *
 
 
 @authentication.route('/login', methods=['POST'])
@@ -20,9 +22,21 @@ def login():
 
 @authentication.route('/register', methods=['POST'])
 def register():
-    print('register', request.json)
-    resp = jsonify()
-    return resp
+    email = request.json['email']
+    password = request.json['password']
+
+    if len(password) < 8:
+        return abort(400)
+
+    exists = User.query.filter_by(email=email).first() is not None
+    if exists:
+        return abort(400)
+
+    user = User(email=email, password=password)
+    db.session.add(user)
+    db.session.commit()
+    token = encode_token(email, password)
+    return jsonify({'token': token})
 
 
 @authentication.route('/user', methods=['GET'])
