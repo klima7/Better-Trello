@@ -17,7 +17,7 @@
             width="40"
             height="40"
           />
-          <span class="text-h4">Trello</span>
+          <span class="text-h4">BetterTrello</span>
         </div>
       </router-link>
 

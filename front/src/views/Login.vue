@@ -42,10 +42,23 @@
           </v-card-text>
           <v-card-actions class="pa-5">
             <v-spacer></v-spacer>
-            <v-btn color="primary" @click="resetClicked">Reset</v-btn>
-            <v-btn color="primary" @click="loginClicked" :disabled="!isValid"
-              >Login</v-btn
+            <v-btn
+              @click="resetClicked"
+              fab
+              color="#E57373"
+              dark
+              class="mr-6"
             >
+              <v-icon>mdi-backspace</v-icon>
+            </v-btn>
+            <v-btn
+              fab
+              color="green"
+              @click="loginClicked"
+              :disabled="!isValid"
+            >
+              <v-icon dark>mdi-arrow-right</v-icon>
+            </v-btn>
           </v-card-actions>
         </v-card>
       </v-flex>
