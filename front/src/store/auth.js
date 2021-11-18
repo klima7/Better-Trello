@@ -13,10 +13,6 @@ export default {
       return Vue.auth.fetch(data);
     },
 
-    refresh(data) {
-      return Vue.auth.refresh(data);
-    },
-
     login(ctx, data) {
       return new Promise((resolve, reject) => {
         Vue.auth.login({
@@ -27,14 +23,7 @@ export default {
           redirect: null,
           staySignedIn: data.rememberMe,
         })
-        .then((res) => {
-          if (data.remember) {
-            Vue.auth.remember(JSON.stringify({
-              name: ctx.getters.user.first_name
-            }));
-          }
-          resolve(res);
-        }, reject);
+        .then(resolve, reject);
       });
     },
 
@@ -58,21 +47,6 @@ export default {
         }, reject);
       });
     },
-
-    impersonate(ctx, data) {
-      var props = this.getters['properties/data'];
-
-      Vue.auth.impersonate({
-        url: 'auth/' + data.user.id + '/impersonate',
-        redirect: 'user-account'
-      });
-    },
-
-    unimpersonate(ctx) {
-      Vue.auth.unimpersonate({
-        redirect: 'admin-users'
-      });
-    },    
 
     logout(ctx) {
       return Vue.auth.logout();
