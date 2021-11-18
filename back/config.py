@@ -7,3 +7,5 @@ class Config(object):
         if 'DATABASE_URL' in os.environ else 'sqlite:///../app.db'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SECRET_KEY = 'very-secret-key'
+    CORS_EXPOSE_HEADERS = ['Authorization']
+    CORS_SEND_WILDCARD = True

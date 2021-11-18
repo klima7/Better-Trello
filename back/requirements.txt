@@ -1,4 +1,9 @@
 flask
 flask-cors
+Flask-HTTPAuth
 flask-sqlalchemy
+flask-marshmallow
+marshmallow-sqlalchemy
 psycopg2
+pyjwt
+werkzeug

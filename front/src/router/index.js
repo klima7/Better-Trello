@@ -1,27 +1,48 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import AddTodo from '../views/AddTodo.vue'
-import ShowTodos from '../views/ShowTodos.vue'
+import Home from '../views/Home.vue'
+import Login from '../views/Login.vue'
+import Register from '../views/Register.vue'
+import Logout from '../views/Logout.vue'
+import Boards from '../views/Boards.vue'
 
 Vue.use(VueRouter)
 
 const routes = [
   {
     path: '/',
-    name: 'Show Todos',
-    component: ShowTodos
+    name: 'home',
+    component: Home,
   },
   {
-    path: '/addtodo',
-    name: 'Add Todo',
-    component: AddTodo
+    path: '/login',
+    name: 'login',
+    component: Login,
+  },
+  {
+    path: '/register',
+    name: 'register',
+    component: Register,
+  },
+  {
+    path: '/logout',
+    name: 'logout',
+    component: Logout
+  },
+  {
+    path: '/boards',
+    name: 'boards',
+    component: Boards,
+    meta: {
+      auth: true
+    },
   },
 ]
 
-const router = new VueRouter({
+Vue.router = new VueRouter({
   mode: "history",
   base: '/Trello-Sierra/',
   routes
 })
 
-export default router
+export default Vue.router

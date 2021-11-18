@@ -1,17 +1,15 @@
-from flask_cors import cross_origin
-
-from app import app
+from . import main
+from .. import auth
+from flask import request, jsonify
 from app.models import *
-from flask import request
-from flask import jsonify
 
 
-@app.route('/')
+@main.route('/')
 def index():
-    return 'Hello'
+    return 'Ok'
 
 
-@app.route('/todos', methods=['POST'])
+@main.route('/todos', methods=['POST'])
 def add_todo():
     data = request.json
     teacher = Todo(content=data['content'])
@@ -20,7 +18,8 @@ def add_todo():
     return 'Todo added'
 
 
-@app.route('/todos', methods=['GET'])
+@main.route('/todos', methods=['GET'])
+@auth.login_required
 def get_todos():
     todos = Todo.query.all()
     todos_json = [todo.to_json() for todo in todos]
