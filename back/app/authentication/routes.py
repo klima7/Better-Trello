@@ -3,6 +3,7 @@ from .. import auth
 from .token import encode_token
 from flask import jsonify, request, abort
 from app.models import *
+from app.schemas import *
 
 
 @authentication.route('/login', methods=['POST'])
@@ -49,4 +50,6 @@ def register():
 @auth.login_required
 def user():
     print('user: ', auth.current_user())
-    return jsonify({'nick': 'klima7'})
+    user = auth.current_user()
+    user_json = user_schema.dump(user)
+    return user_json
