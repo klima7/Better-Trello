@@ -25,6 +25,9 @@ export default {
     if(store.getters.isLogged) {
       next('/boards')
     }
+    else {
+      next()
+    }
   }
 }
 </script>
