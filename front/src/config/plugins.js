@@ -27,7 +27,6 @@ Vue.use(auth, {
   },
   options: {
     rolesKey: "type",
-    notFoundRedirect: { name: "user-account" },
     parseUserData(data) {
       return data;
     },

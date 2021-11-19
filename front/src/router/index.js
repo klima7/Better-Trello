@@ -5,6 +5,7 @@ import Login from "../views/Login.vue";
 import Register from "../views/Register.vue";
 import Logout from "../views/Logout.vue";
 import Boards from "../views/Boards.vue";
+import NotFound from "../views/NotFound.vue";
 
 Vue.use(VueRouter);
 
@@ -18,16 +19,25 @@ const routes = [
     path: "/login",
     name: "login",
     component: Login,
+    meta: {
+      auth: false,
+    },
   },
   {
     path: "/register",
     name: "register",
     component: Register,
+    meta: {
+      auth: false,
+    },
   },
   {
     path: "/logout",
     name: "logout",
     component: Logout,
+    meta: {
+      auth: false,
+    },
   },
   {
     path: "/boards",
@@ -36,6 +46,11 @@ const routes = [
     meta: {
       auth: true,
     },
+  },
+  {
+    path: "*",
+    name: "404",
+    component: NotFound,
   },
 ];
 
