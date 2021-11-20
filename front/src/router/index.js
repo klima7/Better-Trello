@@ -6,6 +6,7 @@ import Register from "../views/Register.vue";
 import Logout from "../views/Logout.vue";
 import Boards from "../views/Boards.vue";
 import NotFound from "../views/NotFound.vue";
+import BoardPlaceholder from '../views/BoardPlaceholder.vue';
 
 Vue.use(VueRouter);
 
@@ -24,6 +25,22 @@ const routes = [
     },
   },
   {
+    path: '/boards',
+    name: 'boards',
+    component: Boards,
+    meta: {
+      auth: true,
+    }
+  },
+  {
+    path: '/board/:board_id',
+    name: 'Board',
+    component: BoardPlaceholder,
+    meta: {
+      auth: true,
+    }
+  },
+  {
     path: "/register",
     name: "register",
     component: Register,
@@ -37,14 +54,6 @@ const routes = [
     component: Logout,
     meta: {
       auth: false,
-    },
-  },
-  {
-    path: "/boards",
-    name: "boards",
-    component: Boards,
-    meta: {
-      auth: true,
     },
   },
   {
