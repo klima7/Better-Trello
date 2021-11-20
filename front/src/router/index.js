@@ -6,8 +6,7 @@ import Register from "../views/Register.vue";
 import Logout from "../views/Logout.vue";
 import Boards from "../views/Boards.vue";
 import NotFound from "../views/NotFound.vue";
-import ListBoards from '../views/ListBoards.vue'
-import BoardPlaceholder from '../views/BoardPlaceholder.vue'
+import BoardPlaceholder from '../views/BoardPlaceholder.vue';
 
 Vue.use(VueRouter);
 
@@ -26,14 +25,20 @@ const routes = [
     },
   },
   {
-    path: '/listboards',
-    name: 'List boards',
-    component: ListBoards
+    path: '/boards',
+    name: 'boards',
+    component: Boards,
+    meta: {
+      auth: true,
+    }
   },
   {
     path: '/board/:board_id',
     name: 'Board',
-    component: BoardPlaceholder
+    component: BoardPlaceholder,
+    meta: {
+      auth: true,
+    }
   },
   {
     path: "/register",
@@ -49,14 +54,6 @@ const routes = [
     component: Logout,
     meta: {
       auth: false,
-    },
-  },
-  {
-    path: "/boards",
-    name: "boards",
-    component: Boards,
-    meta: {
-      auth: true,
     },
   },
   {

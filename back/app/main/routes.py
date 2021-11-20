@@ -3,7 +3,6 @@ from .. import auth
 from flask import request, jsonify
 from app.models import *
 
-
 @main.route('/')
 def index():
     return 'Ok'
@@ -25,9 +24,23 @@ def get_todos():
     todos_json = [todo.to_json() for todo in todos]
     return jsonify(todos_json)
 
-@app.route('/boards/<int:user_id>', methods=['GET'])
-def get_board_list(user_id):
-    boards = Board.query.filter_by(user_id=user_id).all()
-    return jsonify([
-        {"id": b.id, "name": b.name} for b in boards
-    ])
+@main.route('/boards', methods=['GET'])
+@auth.login_required
+def get_board_list():
+    user = auth.current_user()
+    if user is not None:
+        boards = Board.query.filter_by(user_id=user.id).all()
+        return jsonify([
+            {"id": b.id, "name": b.name} for b in boards
+        ])
+    return jsonify([])
+
+
+
+# @authentication.route('/user', methods=['GET'])
+# @auth.login_required
+# def user():
+#     print('user: ', auth.current_user())
+#     user = auth.current_user()
+#     user_json = user_schema.dump(user)
+#     return user_json

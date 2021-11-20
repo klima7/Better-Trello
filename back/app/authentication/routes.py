@@ -21,7 +21,7 @@ def login():
     token = encode_token(email, password)
 
     resp = jsonify()
-    resp.headers['Authorization'] = 'Bearer: ' + token
+    resp.headers['Authorization'] = 'Bearer: ' + token.decode("utf-8")
     return resp
 
 
