@@ -34,13 +34,3 @@ def get_board_list():
             {"id": b.id, "name": b.name} for b in boards
         ])
     return jsonify([])
-
-
-
-# @authentication.route('/user', methods=['GET'])
-# @auth.login_required
-# def user():
-#     print('user: ', auth.current_user())
-#     user = auth.current_user()
-#     user_json = user_schema.dump(user)
-#     return user_json

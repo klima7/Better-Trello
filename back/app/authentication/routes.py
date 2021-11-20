@@ -21,7 +21,7 @@ def login():
     token = encode_token(email, password)
 
     resp = jsonify()
-    resp.headers['Authorization'] = 'Bearer: ' + token.decode("utf-8")
+    resp.headers['Authorization'] = 'Bearer: ' + token.decode("utf-8") if type(token) == type(b"") else token
     return resp
 
 
