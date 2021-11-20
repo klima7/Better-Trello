@@ -1,26 +1,28 @@
-import Vue from 'vue'
-import axios from 'axios'
-import VueAxios from 'vue-axios'
-import App from './App.vue'
-import router from './router'
-import store from './store'
-import vuetify from './plugins/vuetify'
+import Vue from "vue";
+import App from "./App.vue";
+import router from "./router";
+import store from "./store";
+import vuetify from "./plugins/vuetify";
+import http from "./http";
+import config from "./config";
+import "./assets/css/main.css"; // global styles
 
-Vue.config.productionTip = false
-
-axios.defaults.baseURL = process.env.VUE_APP_BACKEND_URL
-Vue.use(VueAxios, axios)
+Vue.config.productionTip = false;
 
 new Vue({
-  router,
-  store,
-  vuetify,
-  render: h => h(App),
-  created () {
+  el: "#app",
+  http: http,
+  router: router,
+  store: store,
+  vuetify: vuetify,
+  config: config,
+  render: (h) => h(App),
+
+  created() {
     if (sessionStorage.redirect) {
-        const redirect = sessionStorage.redirect
-        delete sessionStorage.redirect
-        this.$router.push(redirect)
+      const redirect = sessionStorage.redirect;
+      delete sessionStorage.redirect;
+      this.$router.push(redirect);
     }
-}
-}).$mount('#app')
+  },
+});

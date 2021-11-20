@@ -1,22 +1,29 @@
-import Vue from 'vue'
-import VueRouter from 'vue-router'
-import AddTodo from '../views/AddTodo.vue'
-import ShowTodos from '../views/ShowTodos.vue'
+import Vue from "vue";
+import VueRouter from "vue-router";
+import Home from "../views/Home.vue";
+import Login from "../views/Login.vue";
+import Register from "../views/Register.vue";
+import Logout from "../views/Logout.vue";
+import Boards from "../views/Boards.vue";
+import NotFound from "../views/NotFound.vue";
 import ListBoards from '../views/ListBoards.vue'
 import BoardPlaceholder from '../views/BoardPlaceholder.vue'
 
-Vue.use(VueRouter)
+Vue.use(VueRouter);
 
 const routes = [
   {
-    path: '/',
-    name: 'Show Todos',
-    component: ShowTodos
+    path: "/",
+    name: "home",
+    component: Home,
   },
   {
-    path: '/addtodo',
-    name: 'Add Todo',
-    component: AddTodo
+    path: "/login",
+    name: "login",
+    component: Login,
+    meta: {
+      auth: false,
+    },
   },
   {
     path: '/listboards',
@@ -28,12 +35,41 @@ const routes = [
     name: 'Board',
     component: BoardPlaceholder
   },
-]
+  {
+    path: "/register",
+    name: "register",
+    component: Register,
+    meta: {
+      auth: false,
+    },
+  },
+  {
+    path: "/logout",
+    name: "logout",
+    component: Logout,
+    meta: {
+      auth: false,
+    },
+  },
+  {
+    path: "/boards",
+    name: "boards",
+    component: Boards,
+    meta: {
+      auth: true,
+    },
+  },
+  {
+    path: "*",
+    name: "404",
+    component: NotFound,
+  },
+];
 
-const router = new VueRouter({
+Vue.router = new VueRouter({
   mode: "history",
-  base: '/Trello-Sierra/',
-  routes
-})
+  base: "/Trello-Sierra/",
+  routes,
+});
 
-export default router
+export default Vue.router;
