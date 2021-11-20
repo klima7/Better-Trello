@@ -13,8 +13,8 @@
 					:key="board.id">
 
 					<v-list-item 
-					:key="board.id" 
-					v-on:click="boardSelected(board.id)"
+					:key="board.id"
+					:to="'/board/' + board.id"
 					link>
 						<v-list-item-content>
 							<v-list-item-title> {{ board.name }} </v-list-item-title>
@@ -29,20 +29,35 @@
 </template>
 
 <script>
+
+	const axios = require('axios').default;
+
 	export default {
 		data() {
 			return {
-				boards: [
-					{id: 0, name: "Jacek"},
-					{id: 73, name: "Stasiak"},
-					{id: 72, name: "baby a triple"}
-				]
+				boards: []
 			}
 		},
 		methods: {
 			boardSelected(id) {
 				alert("nie wiem czy to będzie potrzebne tutaj: " + id);
+			},
+			fetchBoardList() {
+				axios.get('/boards/1')
+				.then((response) => {
+					console.log(response);
+					this.boards = response.data;
+				})
+				// eslint-disable-next-line no-unused-vars
+				.catch((error) =>  {
+					console.log(`Sorry sir no boards here. ${error}`);
+					this.boards = [];
+				})
 			}
+		},
+		created() {
+			console.log("anybody here");
+			this.fetchBoardList();
 		}
 	}
 </script>

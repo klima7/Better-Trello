@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 import AddTodo from '../views/AddTodo.vue'
 import ShowTodos from '../views/ShowTodos.vue'
 import ListBoards from '../views/ListBoards.vue'
+import BoardPlaceholder from '../views/BoardPlaceholder.vue'
 
 Vue.use(VueRouter)
 
@@ -21,6 +22,11 @@ const routes = [
     path: '/listboards',
     name: 'List boards',
     component: ListBoards
+  },
+  {
+    path: '/board/:board_id',
+    name: 'Board',
+    component: BoardPlaceholder
   },
 ]
 
