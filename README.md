@@ -23,6 +23,8 @@ sudo apt install nodejs
 sudo apt install npm
 # Install Vue.js
 npm install -g @vue/cli
+# Install postgre-sql
+sudo apt install libpq-dev
 ```
 ## Run application
 To run application: install required packages mentioned in the section above. Clone the repository and follow the following steps:
@@ -32,8 +34,10 @@ To run application: install required packages mentioned in the section above. Cl
 cd back/
 # Install Python packages
 pip install -r requirements.txt
+# Fill database with sample data
+flask initdb
 # Start backend
-python start.py
+flask run
 ```
 ### Frontend run
 ```bash
