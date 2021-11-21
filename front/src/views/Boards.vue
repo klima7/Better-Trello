@@ -6,8 +6,17 @@
 		<v-card>
 			<v-card-title>Lista tablic</v-card-title>
 			<v-card-text>
-				<v-btn>Dodaj tablicę?</v-btn>
-			<!-- <v-container> -->
+				<!-- Add button and field -->
+				<v-form ref="form">
+					<v-text-field :rules="rules" hide-details="auto" label="Nazwa nowej tablicy" color="primary" v-model="new_board_name" @keypress.enter="addBoard">
+						<template v-slot:append>
+							<v-btn depressed tile color="primary" class="ma-0" @click="addBoard">
+								Dodaj tablicę
+							</v-btn>
+						</template>	
+					</v-text-field>
+				</v-form>				
+				<!-- <v-container> -->
 				<v-list 
 					two-line 
 					v-for="board in boards" 
@@ -37,7 +46,12 @@
 	export default {
 		data() {
 			return {
-				boards: []
+				new_board_name: "",
+				boards: [],
+				rules: [
+					(value) => !!value || "Pole wymagane!",
+					(value) => (value || "").length <= 40 || "Maksymalna długość nazwy tablicy: 40 znaków!",
+				],
 			}
 		},
 		methods: {
@@ -55,6 +69,23 @@
 					console.log(`Sorry sir no boards here. ${error}`);
 					this.boards = [];
 				})
+			},
+			addBoard() {
+				if (this.new_board_name == '') {
+					return
+				}
+				let data = {
+					name: this.new_board_name
+				};
+				axios.post('/boards', data)
+				.then((response) => {
+					console.log('Added: ' + this.new_board_name);
+					this.fetchBoardList();
+					this.$refs.form.reset();
+				})
+				.catch((error) => {
+					console.log('Error occurred while adding' + this.new_board_name);
+				});	
 			}
 		},
 		created() {
