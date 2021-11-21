@@ -4,7 +4,7 @@
     delete from column;
     delete from board;
 
--- SAMPLE USER
+-- SAMPLE USER (password: testtest)
     insert into user(id, email, password_hash) values(1, 'test@test.com', 'pbkdf2:sha256:260000$7FipGbCSJh8EZyCp$3bc43811f2ce505071826fa8da1daf2c92d6685a928667aa1cf396651ee75368');
 
 -- GROCERY LIST TEST BOARD
