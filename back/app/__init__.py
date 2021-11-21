@@ -4,7 +4,6 @@ from flask_httpauth import HTTPTokenAuth
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
 from config import Config
-from app.db_sample_data import add_sample_data
 
 # Creating app
 app = Flask(__name__)
@@ -21,6 +20,8 @@ auth = HTTPTokenAuth(scheme='Bearer')
 # Database initialization
 from app.models import *
 db.create_all()
+
+from app.db_sample_data import add_sample_data
 
 # Mounting blueprints
 from .authentication import authentication as auth_blueprint
