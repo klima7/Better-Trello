@@ -4,6 +4,7 @@ from flask_httpauth import HTTPTokenAuth
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
 from config import Config
+from app.db_sample_data import add_sample_data
 
 # Creating app
 app = Flask(__name__)
@@ -27,3 +28,8 @@ app.register_blueprint(auth_blueprint, url_prefix='/auth/')
 
 from .main import main as main_blueprint
 app.register_blueprint(main_blueprint, url_prefix='/')
+
+
+@app.cli.command('initdb', help='Initialize database with sample data')
+def initdb():
+    add_sample_data()

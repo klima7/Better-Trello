@@ -3,6 +3,7 @@ from .. import auth
 from flask import json, request, jsonify, abort
 from app.models import *
 
+
 @main.route('/')
 def index():
     return 'Ok'
