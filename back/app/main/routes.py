@@ -9,23 +9,6 @@ def index():
     return 'Ok'
 
 
-@main.route('/todos', methods=['POST'])
-def add_todo():
-    data = request.json
-    teacher = Todo(content=data['content'])
-    db.session.add(teacher)
-    db.session.commit()
-    return 'Todo added'
-
-
-@main.route('/todos', methods=['GET'])
-@auth.login_required
-def get_todos():
-    todos = Todo.query.all()
-    todos_json = [todo.to_json() for todo in todos]
-    return jsonify(todos_json)
-
-
 @main.route('/boards', methods=['GET'])
 @auth.login_required
 def get_board_list():
@@ -85,5 +68,26 @@ def get_board_info():
         columns_dict.append({'name': column.name, 'cards': all_cards})
     if columns_dict is None:
         return {}, 200
-    output_dict = {'board_name': board_json['name'], 'columns': columns_dict}
+    output_dict = {'id': board_id, 'board_name': board_json['name'], 'columns': columns_dict}
     return jsonify(output_dict), 200
+
+
+@main.route('/boards/<int:board_id>', methods=['PATCH'])
+@auth.login_required
+def board_update(board_id):
+    user = auth.current_user()
+
+    board = Board.query.filter_by(id=board_id).first()
+    if board is None:
+        return abort(404)
+    if board.user_id != user.id:
+        return abort(403)
+
+    if request.json and 'name' in request.json:
+        name = request.json['name']
+        if len(name) == 0 or len(name) > 30:
+            return abort(400, 'Invalid name length')
+        board.name = name
+
+    db.session.commit()
+    return {}, 200
