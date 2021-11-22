@@ -30,7 +30,6 @@ class Card(db.Model):
         return {"title": self.title, "description": self.description}
 
 
-
 class Column(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(40))

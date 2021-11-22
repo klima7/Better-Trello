@@ -1,47 +1,41 @@
 <template>
-	<!-- <v-container
-		class="py-8 px-6"
-		fluid> -->
 	<v-container>
-		<v-card>
-			<v-card-title>Lista tablic</v-card-title>
-			<v-card-text>
-				<!-- Add button and field -->
-				<v-form ref="form">
-					<v-text-field :rules="rules" hide-details="auto" label="Nazwa nowej tablicy" color="primary" v-model="new_board_name" @keypress.enter="addBoard">
-						<template v-slot:append>
-							<v-btn depressed tile color="primary" class="ma-0" @click="addBoard">
-								Dodaj tablicę
-							</v-btn>
-						</template>	
-					</v-text-field>
-				</v-form>				
-				<!-- <v-container> -->
-				<v-list 
-					two-line 
-					v-for="board in boards" 
-					:key="board.id">
 
-					<v-list-item 
-					:key="board.id"
-					:to="'/board/' + board.id"
-					link>
-						<v-list-item-content>
-							<v-list-item-title> {{ board.name }} </v-list-item-title>
-							<!-- <v-list-item-subtitle>huh?</v-list-item-subtitle> -->
-						</v-list-item-content>
-					</v-list-item>
-					<v-divider v-if="board.id != boards[boards.length-1].id" :key="`divider-${board.id}`"></v-divider>
-				</v-list>
-			</v-card-text>
-			<!-- </v-container> -->
-		</v-card>
+        <v-row>
+            <v-col>
+                <h1>Lista tablic</h1>
+            </v-col>
+        </v-row>
+
+        <v-row>
+            <v-col>
+                <v-card color="#9cd9ff">
+                    <v-card-text>
+                        <v-form ref="form">
+                            <v-text-field :rules="rules" hide-details="auto" label="Nazwa nowej tablicy" color="primary" v-model="new_board_name" @keypress.enter="addBoard">
+                                <template v-slot:append>
+                                    <v-btn depressed tile color="primary" class="ma-0" @click="addBoard">
+                                        Dodaj tablicę
+                                    </v-btn>
+                                </template>	
+                            </v-text-field>
+                        </v-form>				
+                    </v-card-text>
+                </v-card>
+            </v-col>
+        </v-row>
+
+        <v-row>
+            <BoardTile v-for="board in boards" :key="board.id" :board="board" />
+        </v-row>
+
 	</v-container>
 </template>
 
 <script>
 
 	const axios = require('axios').default;
+	import BoardTile from "@/components/BoardTile.vue";
 
 	export default {
 		data() {
@@ -53,6 +47,9 @@
 					(value) => (value || "").length <= 40 || "Maksymalna długość nazwy tablicy: 40 znaków!",
 				],
 			}
+		},
+		components: {
+			BoardTile
 		},
 		methods: {
 			boardSelected(id) {
