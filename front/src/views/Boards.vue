@@ -9,7 +9,7 @@
 
         <v-row>
             <v-col>
-                <v-card color="#9cd9ff">
+                <v-card color="#89cff0">
                     <v-card-text>
                         <v-form ref="form">
                             <v-text-field :rules="rules" hide-details="auto" label="Nazwa nowej tablicy" color="primary" v-model="new_board_name" @keypress.enter="addBoard">

@@ -10,7 +10,7 @@
         v-for="column in board_info.columns"
         class="d-flex flex-column pt-3 mr-6 list"
         v-bind:key="column.name"
-        color="#7de1ff"
+        color="#89cff0"
       >
         <h2 class="ms-3">{{ column.name }}</h2>
         <v-container>
