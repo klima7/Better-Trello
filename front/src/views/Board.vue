@@ -14,14 +14,7 @@
       >
         <h2 class="ms-3">{{ column.name }}</h2>
         <v-container>
-          <v-card
-            v-for="card in column.cards"
-            class="mb-3"
-            v-bind:key="card.title"
-          >
-            <v-card-title>{{ card.title }}</v-card-title>
-            <v-card-text>{{ card.description }}</v-card-text>
-          </v-card>
+          <Card v-for="card in column.cards" :key="card.id" :card="card"/>
         </v-container>
       </v-card>
     </v-container>
@@ -30,12 +23,14 @@
 
 <script>
 import BoardName from "@/components/BoardName.vue";
+import Card from "@/components/Card.vue";
 
 const axios = require("axios").default;
 
 export default {
   components: {
-    BoardName
+    BoardName,
+    Card,
   },
   data() {
     return {
