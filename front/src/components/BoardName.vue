@@ -4,7 +4,7 @@
     <v-row align="center" v-if="!editing">
       <h1 class="d-inline">{{ board.board_name }}</h1>
       <v-btn icon class="ml-4" @click="editClicked()">
-        <v-icon>mdi-pencil</v-icon>
+        <v-icon color="black">mdi-pencil</v-icon>
       </v-btn>
     </v-row>
 
@@ -19,12 +19,13 @@
               outlined
               type="text"
               v-model="newName"
+              style="background: white; width: 250pt;"
             />
             <v-btn icon class="ml-2" @click="saveClicked">
-              <v-icon>mdi-check</v-icon>
+              <v-icon color="black">mdi-check</v-icon>
             </v-btn>
             <v-btn icon @click="cancelClicked">
-              <v-icon>mdi-close</v-icon>
+              <v-icon color="black">mdi-close</v-icon>
             </v-btn>
           </v-row>
         </v-col>
