@@ -13,7 +13,7 @@
       <h1>You have been logged out!</h1>
     </v-row>
     <v-row justify="center">
-      <v-btn to="/" class="mt-4" outlined color="indigo">To home page</v-btn>
+      <v-btn to="/" class="mt-4" outlined color="primary" style="background: white;">To home page</v-btn>
     </v-row>
   </v-container>
 </template>
