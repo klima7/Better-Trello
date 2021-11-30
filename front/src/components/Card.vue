@@ -13,10 +13,5 @@ export default {
   props: {
     card: Object
   },
-  computed: {
-    url: function() {
-      return `/board/${this.board.id}`
-    }
-  }
 };
 </script>

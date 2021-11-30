@@ -6,31 +6,21 @@
       </v-col>
     </v-row>
     <v-container fluid class="d-flex flex-row pr-6 pt-3 pl-0">
-      <v-card
-        v-for="column in board_info.columns"
-        class="d-flex flex-column pt-3 mr-6 list"
-        v-bind:key="column.name"
-        color="#89cff0"
-      >
-        <h2 class="ms-3">{{ column.name }}</h2>
-        <v-container>
-          <Card v-for="card in column.cards" :key="card.id" :card="card"/>
-        </v-container>
-      </v-card>
+      <Column v-for="column in board_info.columns" :key="column.id" :column="column"/>
     </v-container>
   </v-container>
 </template>
 
 <script>
 import BoardName from "@/components/BoardName.vue";
-import Card from "@/components/Card.vue";
+import Column from "@/components/Column.vue";
 
 const axios = require("axios").default;
 
 export default {
   components: {
     BoardName,
-    Card,
+    Column,
   },
   data() {
     return {
