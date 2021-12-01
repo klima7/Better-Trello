@@ -25,6 +25,7 @@ class Card(db.Model):
     title = db.Column(db.String(30))
     description = db.Column(db.String)
     column_id = db.Column(db.Integer, db.ForeignKey('column.id'))
+    order = db.Column(db.Integer)
 
     def toJSON(self):
         return {"title": self.title, "description": self.description}
@@ -35,6 +36,7 @@ class Column(db.Model):
     name = db.Column(db.String(40))
     cards = db.relationship("Card", backref="card", lazy='select')
     board_id = db.Column(db.Integer, db.ForeignKey('board.id'))
+    order = db.Column(db.Integer)
 
     def toJSON(self):
         return {"name": self.name}
