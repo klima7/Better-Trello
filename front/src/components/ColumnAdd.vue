@@ -6,6 +6,7 @@
   >
     <v-text-field
       v-if="adding"
+      ref="nameField"
       v-model="columnName"
       dense
       hide-details
@@ -56,6 +57,7 @@
 <script>
 export default {
   props: {
+    columns: null,
   },
 
   data() {
@@ -69,6 +71,7 @@ export default {
     firstAddClicked() {
       this.columnName = "";
       this.adding = true;
+      this.setFocusOnTextField();
     },
 
     cancelClicked() {
@@ -80,7 +83,14 @@ export default {
       if(columnName.length == 0) return;
 
       console.log("Adding column: " + this.columnName)
+      this.columns.push({name: columnName, cards: []})
+      this.columnName = "";
+      this.setFocusOnTextField()
     },
+
+    setFocusOnTextField() {
+      setTimeout(() => {  this.$refs.nameField.focus(); }, 50);
+    }
   },
 };
 </script>
