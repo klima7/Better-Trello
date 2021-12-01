@@ -2,7 +2,7 @@
   <v-card
     class="d-flex flex-column list"
     v-bind:key="column.name"
-    width="500px"
+    width="350px"
     color="#89cff0"
   >
     <v-card-title class="text-h5">{{ column.name }}</v-card-title>

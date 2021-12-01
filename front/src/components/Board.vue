@@ -42,5 +42,7 @@ export default {
 <style scoped>
 .columns-container {
   display: flex;
+  align-items:flex-start;
+  align-content:flex-start;
 }
 </style>
