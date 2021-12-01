@@ -1,5 +1,5 @@
 <template>
-  <v-container class="my-1">
+  <v-container fluid class="my-1">
     <!-- not editing -->
     <v-row align="center" v-if="!editing">
       <h1 class="d-inline">{{ board.board_name }}</h1>

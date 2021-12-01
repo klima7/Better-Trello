@@ -21,8 +21,15 @@ export default {
 </script>
 
 <style>
-#app {
-  background: url('~@/assets/images/background.jpg') no-repeat center center fixed !important;
+body {
+  background: url('~@/assets/images/background.jpg') no-repeat top left fixed !important;
   background-size: cover !important;
+}
+#app {
+  background: inherit;
+  background-size: inherit;
+}
+html {
+  overflow-x: auto !important;
 }
 </style>

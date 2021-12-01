@@ -1,31 +1,20 @@
 <template>
-  <v-container>
-    <v-row>
-      <v-col>
-        <BoardName :board="board_info"/>
-      </v-col>
-    </v-row>
-    <v-container fluid class="d-flex flex-row pr-6 pt-3 pl-0">
-      <Column v-for="column in board_info.columns" :key="column.id" :column="column"/>
-    </v-container>
-  </v-container>
+  <Board :board="board" />
 </template>
 
 <script>
-import BoardName from "@/components/BoardName.vue";
-import Column from "@/components/Column.vue";
+import Board from "@/components/Board.vue";
 
 const axios = require("axios").default;
 
 export default {
   components: {
-    BoardName,
-    Column,
+    Board,
   },
   data() {
     return {
       id: this.$route.params.board_id,
-      board_info: [],
+      board: [],
     };
   },
   methods: {
@@ -39,8 +28,7 @@ export default {
       axios
         .post("/info", data)
         .then((response) => {
-          console.log("Successfully fetched board with id: " + this.id);
-          this.board_info = response.data;
+          this.board = response.data;
         })
         .catch((error) => {
           console.log(
