@@ -21,6 +21,10 @@ class User(db.Model):
 
 
 class Card(db.Model):
+    __table_args__ = (
+        db.UniqueConstraint('column_id', 'order', name='column_order_constraint'),
+    )
+
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(30))
     description = db.Column(db.String)
@@ -32,6 +36,10 @@ class Card(db.Model):
 
 
 class Column(db.Model):
+    __table_args__ = (
+        db.UniqueConstraint('board_id', 'order', name='board_order_constraint'),
+    )
+
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(40))
     cards = db.relationship("Card", backref="card", lazy='select')

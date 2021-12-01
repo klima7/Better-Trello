@@ -1,6 +1,7 @@
 from app.models import *
 from app import db
 
+
 def add_sample_data():
     # RESET DATABASE
     User.query.delete()
@@ -9,7 +10,7 @@ def add_sample_data():
     Board.query.delete()
 
     # SAMPLE USER (password: testtest)
-    db.session.add(User(id=1, email='test@test.com', password_hash='pbkdf2:sha256:260000$7FipGbCSJh8EZyCp$3bc43811f2ce505071826fa8da1daf2c92d6685a928667aa1cf396651ee75368'))
+    db.session.add(User(id=1, email='test@test.com', password="testtest"))
 
     # GROCERY LIST TEST BOARD
     # CARDS
