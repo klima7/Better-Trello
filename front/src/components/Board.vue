@@ -9,8 +9,10 @@
         group="columns"
         animation="200"
         draggable=".item"
+        :list="board.columns"
         :scroll-sensitivity="200"
         :force-fallback="true"
+        @end="onColumnDrop"
       >
         <Column
           v-for="column in board.columns"
@@ -37,12 +39,23 @@ export default {
   props: {
     board: null,
   },
+
   components: {
     BoardName,
     Column,
     ColumnAdd,
     draggable,
   },
+
+  methods: {
+    onColumnDrop: function(event) {
+      console.log("Column:", this.board.columns[event.newIndex].name)
+      console.log("From position:", event.oldIndex)
+      console.log("To position:", event.newIndex)
+      console.log("-----------")
+    },
+  }
+
 };
 </script>
 

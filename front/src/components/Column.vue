@@ -40,7 +40,6 @@ export default {
 
   data() {
     return {
-      lastCardMoveEvent: Object,
       cardMoveEvent: Object,
     }
   },
@@ -51,7 +50,6 @@ export default {
   },
 
   methods: {
-
     onCardMove: function(event) {
       this.cardMoveEvent = event;
     },
