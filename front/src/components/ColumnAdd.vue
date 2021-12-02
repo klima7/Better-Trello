@@ -57,7 +57,7 @@
 <script>
 export default {
   props: {
-    columns: null,
+    board: null,
   },
 
   data() {
@@ -79,17 +79,26 @@ export default {
     },
 
     secondAddClicked() {
-      const columnName = this.columnName.trim()
+      const columnName = this.columnName.trim();
       if(columnName.length == 0) return;
 
-      console.log("Adding column: " + this.columnName)
-      this.columns.push({name: columnName, cards: []})
+      console.log("Adding column: " + this.columnName);
+      this.board.columns.push({name: columnName, cards: []});
+      this.addColumn(columnName);
       this.columnName = "";
-      this.setFocusOnTextField()
+      this.setFocusOnTextField();
     },
 
     setFocusOnTextField() {
       setTimeout(() => {  this.$refs.nameField.focus(); }, 50);
+    },
+
+    addColumn(columnName) {
+      this.axios
+      .post(`/boards/${this.board.id}/columns`, {name: columnName})
+      .then((res) => {
+        console.log("Column added")
+      });
     }
   },
 };

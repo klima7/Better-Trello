@@ -23,7 +23,7 @@
         <ColumnAdd 
           slot="footer" 
           class="mr-5"
-          :columns="board.columns"
+          :board="board"
         />
       </draggable>
     </div>

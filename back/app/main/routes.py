@@ -1,6 +1,6 @@
 from . import main
 from .. import auth
-from flask import json, request, jsonify, abort
+from flask import json, request, jsonify
 from app.models import *
 
 
@@ -13,32 +13,29 @@ def index():
 @auth.login_required
 def get_board_list():
     user = auth.current_user()
-    if user is not None:
-        boards = Board.query.filter_by(user_id=user.id).all()
-        return jsonify([
-            {"id": b.id, "name": b.name} for b in boards
-        ])
-    return jsonify([])
+    boards = Board.query.filter_by(user_id=user.id).all()
+    return jsonify([
+        {"id": b.id, "name": b.name} for b in boards
+    ])
 
 
 @main.route('/boards', methods=['POST'])
 @auth.login_required
 def add_board():
     user = auth.current_user()
+
     # Verify arguments
-    if user is None:
-        return abort(400, 'Login required')
     if 'name' not in request.json:
-        return abort(400, '\'name\' field was not found in request')
+        return 'name field was not found in request', 400
     name = request.json['name']
-    if len(name) < 1:
-        return abort(400, 'Board\'s name can not be blank')
-    if len(name) > 40:
-        return abort(400, 'Board\'s name can not exceed 40 characters')
+    if not 1 <= len(name) <= 40:
+        return 'Invalid name length', 400
+
     # Add new board db
     board = Board(name=name, user_id=user.id)
     db.session.add(board)
     db.session.commit()
+
     return {}, 200
 
 
@@ -46,18 +43,18 @@ def add_board():
 @auth.login_required
 def get_board_info():
     user = auth.current_user()
+
     # Verify arguments
-    if user is None:
-        return abort(400, 'Login required')
     if 'id' not in request.json:
-        return abort(400, '\'id\' field was not found in request')
+        return 'Id field not found in request', 400
+
     # Get board
     board_id = request.json['id']
     board_json = Board.query.filter_by(user_id=user.id, id=board_id).first().toJSON()
     if board_json is None:
-        return abort(400, 'Board was not found')
+        return 'Board not found', 404
 
-    # Output dict
+    # Output
     columns_dict = []
     columns = Column.query.filter_by(board_id=board_id).all()
     for column in columns:
@@ -79,15 +76,45 @@ def board_update(board_id):
 
     board = Board.query.filter_by(id=board_id).first()
     if board is None:
-        return abort(404)
+        return 'Board not found', 404
+
     if board.user_id != user.id:
-        return abort(403)
+        return 'User is not owner of this board', 403
 
     if request.json and 'name' in request.json:
         name = request.json['name']
         if len(name) == 0 or len(name) > 30:
-            return abort(400, 'Invalid name length')
+            return 'Invalid name length', 400
         board.name = name
 
     db.session.commit()
+    return {}, 200
+
+
+@main.route('/boards/<int:board_id>/columns', methods=['POST'])
+@auth.login_required
+def column_add(board_id):
+    user = auth.current_user()
+
+    if 'name' not in request.json:
+        return 'Name not provided', 400
+    name = request.json['name']
+
+    if not 1 <= len(name) <= 40:
+        return 'Invalid name length', 400
+
+    board = Board.query.filter_by(id=board_id).first()
+    if board is None:
+        return 'Board not found', 404
+
+    if board.user_id != user.id:
+        return 'User is not owner of this board', 403
+
+    last_column = Column.query.filter_by(board_id=board_id).order_by(Column.order.desc()).first()
+    last_column_id = last_column.order if last_column else 0
+
+    column = Column(name=name, board_id=board_id, order=last_column_id+1)
+    db.session.add(column)
+    db.session.commit()
+
     return {}, 200
