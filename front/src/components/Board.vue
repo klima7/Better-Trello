@@ -19,6 +19,7 @@
           :key="column.id"
           :column="column"
           class="item mr-5"
+          v-on:show-card-details="showCardDetails"
         />
         <ColumnAdd 
           slot="footer" 
@@ -27,6 +28,12 @@
         />
       </draggable>
     </div>
+    <CardDetails
+      v-model="detailsVisible"
+      v-on:visibility-change="hideCardDetails"
+      :card="selectedCard" 
+      :key="selectedCard.id"
+      />
   </div>
 </template>
 
@@ -34,9 +41,16 @@
 import BoardName from "@/components/BoardName.vue";
 import Column from "@/components/Column.vue";
 import ColumnAdd from "@/components/ColumnAdd.vue";
+import CardDetails from "@/components/CardDetails.vue";
 import draggable from "vuedraggable";
 
 export default {
+  data() {
+    return {
+      detailsVisible: false,
+      selectedCard: {id: -1, title: "Title", description: "description"}
+    }
+  },
   props: {
     board: null,
   },
@@ -45,6 +59,7 @@ export default {
     BoardName,
     Column,
     ColumnAdd,
+    CardDetails,
     draggable,
   },
 
@@ -55,6 +70,15 @@ export default {
       console.log("To position:", event.newIndex)
       console.log("-----------")
     },
+    
+    showCardDetails: function(event) {
+      this.selectedCard = event;
+      this.detailsVisible = true;
+    },
+
+    hideCardDetails: function(event) {
+      this.detailsVisible = event;
+    }
   }
 
 };

@@ -22,6 +22,7 @@
           v-for="card in column.cards"
           :key="card.id"
           :card="card"
+          v-on:show-card-details="showCardDetails"
           class="mb-2 mx-2"
         />
       </draggable>
@@ -63,6 +64,9 @@ export default {
       console.log("-----------")
     },
 
+    showCardDetails: function(e) {
+      this.$emit("show-card-details", e);
+    }
   }
 };
 </script>

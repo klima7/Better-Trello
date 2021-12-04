@@ -91,6 +91,41 @@ def board_update(board_id):
     return {}, 200
 
 
+@main.route('/cards/<int:card_id>', methods=['PATCH'])
+@auth.login_required
+def card_update(card_id):
+    user = auth.current_user()
+
+    card = Card.query.filter_by(id=card_id).first()
+    if card is None:
+        return 'Card not found', 404
+
+    column = Column.query.filter_by(id=card.column_id).first()
+    if column is None:
+        return 'Column for card not found', 404
+
+    board = Board.query.filter_by(id=column.board_id).first()
+    if board is None:
+        return 'Board for column not found', 404
+    
+    if board.user_id != user.id:
+        return 'User is not owner of this board', 403
+
+    if request.json and 'title' in request.json:
+        title = request.json['title']
+        if len(title) == 0 or len(title) > 4096:
+            return 'Invalid title length', 400
+        card.title = title
+
+    if request.json and 'description' in request.json:
+        description = request.json['description']
+        if len(description) == 0 or len(description) > 4096:
+            return 'Invalid description length', 400
+        card.description = description
+
+    db.session.commit()
+    return {}, 200
+
 @main.route('/boards/<int:board_id>/columns', methods=['POST'])
 @auth.login_required
 def column_add(board_id):
