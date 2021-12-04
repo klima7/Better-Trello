@@ -22,6 +22,7 @@
           v-for="card in column.cards"
           :key="card.id"
           :card="card"
+          v-on:borger="test1"
           class="mb-2 mx-2"
         />
       </draggable>
@@ -63,6 +64,10 @@ export default {
       console.log("-----------")
     },
 
+    test1: function(e) {
+      console.log("column borger ", e);
+      this.$emit("borger", e);
+    }
   }
 };
 </script>

@@ -20,6 +20,7 @@
           :key="column.id"
           :column="column"
           class="item mr-5"
+          v-on:borger="test1"
         />
         <ColumnAdd 
           slot="footer" 
@@ -29,7 +30,10 @@
       </draggable>
     </div>
     <CardDetails
-      v-model="detailsVisible" />
+      v-model="detailsVisible"
+      v-on:visibility-change="unvisibleDetails"
+      :card="selectedCard" 
+      :key="selectedCard.id" />
       <v-btn @click="tempShowDialog">Test</v-btn>
   </div>
 </template>
@@ -44,7 +48,8 @@ import draggable from "vuedraggable";
 export default {
   data() {
     return {
-      detailsVisible: true
+      detailsVisible: false,
+      selectedCard: {id: -1}
     }
   },
   props: {
@@ -70,6 +75,17 @@ export default {
       console.log("To position:", event.newIndex)
       console.log("-----------")
     },
+    
+    test1: function(event) {
+      // console.log("WOOOOOOO", event);
+      this.selectedCard = event;
+      this.detailsVisible = true;
+    },
+
+    unvisibleDetails: function(event) {
+      this.detailsVisible = event;
+      console.log("unvisibling", event);
+    }
   }
 
 };

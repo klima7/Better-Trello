@@ -32,7 +32,7 @@ class Card(db.Model):
     order = db.Column(db.Integer)
 
     def toJSON(self):
-        return {"title": self.title, "description": self.description}
+        return {"id": self.id, "title": self.title, "description": self.description}
 
 
 class Column(db.Model):
