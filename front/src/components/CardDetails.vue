@@ -67,17 +67,15 @@
 						<v-row class="mb-0">
 							<v-col  class="pt-0 my-2 ml-6">
 						<!-- class="d-inline-block"  -->
-						<div id="desc_edit" class="d-inline-block ml-2">
-							<div v-if="!descriptionEdit">
-								{{ card.description }}
-							</div>
+						<div id="desc_edit" class="ml-2 mr-8">
+							<div v-if="!descriptionEdit" style="white-space: pre;">{{card.description}}</div>
 							<v-form v-else>
 								<v-textarea
 									hide-details
 									outlined
 									type="text"
 									v-model="newDescription"
-									style="background: white; width: 250pt;"
+									style="background: white; width: 100%;"
 									/>
 									<v-btn icon class="ml-2" @click="descriptionEditAccepted">
 									<v-icon color="black">mdi-check</v-icon>
@@ -118,7 +116,8 @@ export default {
 	},
 	methods: {
 		dialogClosed: function (event) {
-			// this.detailsVisible = false;
+			this.titleEdit = false;
+			this.descriptionEdit = false;
 			this.$emit('visibility-change', false);
 		},
 		
