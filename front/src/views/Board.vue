@@ -14,7 +14,7 @@ export default {
   data() {
     return {
       id: this.$route.params.board_id,
-      board: [],
+      board: []
     };
   },
   methods: {
@@ -29,6 +29,7 @@ export default {
         .post("/info", data)
         .then((response) => {
           this.board = response.data;
+          console.log("board: ", response.data);
         })
         .catch((error) => {
           console.log(

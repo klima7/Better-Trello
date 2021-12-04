@@ -2,6 +2,7 @@
   <div class="px-6">
     <div>
       <BoardName :board="board" />
+      <p> {{ detailsVisible }}</p>
     </div>
     <div class="d-flex flex-row">
       <draggable
@@ -27,6 +28,9 @@
         />
       </draggable>
     </div>
+    <CardDetails
+      v-model="detailsVisible" />
+      <v-btn @click="tempShowDialog">Test</v-btn>
   </div>
 </template>
 
@@ -34,9 +38,15 @@
 import BoardName from "@/components/BoardName.vue";
 import Column from "@/components/Column.vue";
 import ColumnAdd from "@/components/ColumnAdd.vue";
+import CardDetails from "@/components/CardDetails.vue";
 import draggable from "vuedraggable";
 
 export default {
+  data() {
+    return {
+      detailsVisible: true
+    }
+  },
   props: {
     board: null,
   },
@@ -45,10 +55,15 @@ export default {
     BoardName,
     Column,
     ColumnAdd,
+    CardDetails,
     draggable,
   },
 
   methods: {
+    tempShowDialog: function(event) {
+      this.detailsVisible = true;
+      console.log(`this.detailsVisible: ${this.detailsVisible}`);
+    },
     onColumnDrop: function(event) {
       console.log("Column:", this.board.columns[event.newIndex].name)
       console.log("From position:", event.oldIndex)
