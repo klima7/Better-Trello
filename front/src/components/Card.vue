@@ -1,5 +1,5 @@
 <template>
-  <v-card v-bind:key="card.title" @click="setActive">
+  <v-card v-bind:key="card.title" @click="showDetails">
     <v-card-title>{{ card.title }}</v-card-title>
     <v-card-subtitle>{{ card.description }}</v-card-subtitle>
   </v-card>
@@ -11,9 +11,8 @@ export default {
     card: Object,
   },
   methods: {
-    setActive: function(event) {
-      console.log("active emmited, parent ", this.$parent);
-      this.$emit('borger', this.card);
+    showDetails: function(event) {
+      this.$emit('show-card-details', this.card);
     }
   }
 };

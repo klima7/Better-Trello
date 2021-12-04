@@ -2,7 +2,6 @@
   <div class="px-6">
     <div>
       <BoardName :board="board" />
-      <p> {{ detailsVisible }}</p>
     </div>
     <div class="d-flex flex-row">
       <draggable
@@ -20,7 +19,7 @@
           :key="column.id"
           :column="column"
           class="item mr-5"
-          v-on:borger="test1"
+          v-on:show-card-details="showCardDetails"
         />
         <ColumnAdd 
           slot="footer" 
@@ -31,10 +30,10 @@
     </div>
     <CardDetails
       v-model="detailsVisible"
-      v-on:visibility-change="unvisibleDetails"
+      v-on:visibility-change="hideCardDetails"
       :card="selectedCard" 
-      :key="selectedCard.id" />
-      <v-btn @click="tempShowDialog">Test</v-btn>
+      :key="selectedCard.id"
+      />
   </div>
 </template>
 
@@ -49,7 +48,7 @@ export default {
   data() {
     return {
       detailsVisible: false,
-      selectedCard: {id: -1}
+      selectedCard: {id: -1, title: "Title", description: "description"}
     }
   },
   props: {
@@ -65,10 +64,6 @@ export default {
   },
 
   methods: {
-    tempShowDialog: function(event) {
-      this.detailsVisible = true;
-      console.log(`this.detailsVisible: ${this.detailsVisible}`);
-    },
     onColumnDrop: function(event) {
       console.log("Column:", this.board.columns[event.newIndex].name)
       console.log("From position:", event.oldIndex)
@@ -76,15 +71,13 @@ export default {
       console.log("-----------")
     },
     
-    test1: function(event) {
-      // console.log("WOOOOOOO", event);
+    showCardDetails: function(event) {
       this.selectedCard = event;
       this.detailsVisible = true;
     },
 
-    unvisibleDetails: function(event) {
+    hideCardDetails: function(event) {
       this.detailsVisible = event;
-      console.log("unvisibling", event);
     }
   }
 
