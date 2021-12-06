@@ -62,7 +62,7 @@ def get_board_info():
         all_cards = []
         for card in cards:
             all_cards.append(card.toJSON())
-        columns_dict.append({'name': column.name, 'cards': all_cards})
+        columns_dict.append({'name': column.name, 'id': column.id, 'board_id': board_id, 'cards': all_cards})
     if columns_dict is None:
         return {}, 200
     output_dict = {'id': board_id, 'board_name': board_json['name'], 'columns': columns_dict}
@@ -125,6 +125,43 @@ def card_update(card_id):
 
     db.session.commit()
     return {}, 200
+
+@main.route('/boards/<int:board_id>/columns/<int:column_id>/cards', methods=['POST'])
+@auth.login_required
+def card_add(board_id, column_id):
+    user = auth.current_user()
+
+    if 'title' not in request.json:
+        return 'Title not provided', 400
+    title = request.json['title']
+
+    if not 1 <= len(title) <= 30:
+        return 'Invalid title length', 400
+
+    board = Board.query.filter_by(id=board_id).first()
+    if board is None:
+        return 'Board not found', 404
+
+    if board.user_id != user.id:
+        return 'User is not owner of this board', 403
+
+    column = Column.query.filter_by(id=column_id).first()
+    if column is None:
+        return 'Column not found in board', 404
+    
+    if column.board_id != board_id:
+        return 'Column does not belong to this board', 403
+    
+
+    last_card = Card.query.filter_by(column_id=column_id).order_by(Card.order.desc()).first()
+    last_card_id = last_card.order if last_card else 0
+
+    card = Card(title=title, column_id=column_id, order=last_card_id+1)
+    db.session.add(card)
+    db.session.commit()
+
+    return {}, 200
+
 
 @main.route('/boards/<int:board_id>/columns', methods=['POST'])
 @auth.login_required

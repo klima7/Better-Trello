@@ -47,7 +47,7 @@ class Column(db.Model):
     order = db.Column(db.Integer)
 
     def toJSON(self):
-        return {"name": self.name}
+        return {"id": self.id, "name": self.name}
 
 
 class Board(db.Model):

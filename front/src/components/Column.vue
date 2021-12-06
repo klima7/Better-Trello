@@ -25,7 +25,12 @@
           v-on:show-card-details="showCardDetails"
           class="mb-2 mx-2"
         />
+        
       </draggable>
+      <CardAdd 
+          class="mb-2 mx-2"
+          :column="column"
+        />
     </div>
   </v-card>
 </template>
@@ -33,6 +38,7 @@
 <script>
 import Card from "@/components/Card.vue";
 import draggable from "vuedraggable";
+import CardAdd from "@/components/CardAdd.vue";
 
 export default {
   props: {
@@ -48,6 +54,7 @@ export default {
   components: {
     Card,
     draggable,
+    CardAdd,
   },
 
   methods: {
