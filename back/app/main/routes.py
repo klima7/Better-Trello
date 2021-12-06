@@ -160,7 +160,7 @@ def card_add(board_id, column_id):
     db.session.add(card)
     db.session.commit()
 
-    return {}, 200
+    return card.toJSON(), 200
 
 
 @main.route('/boards/<int:board_id>/columns', methods=['POST'])

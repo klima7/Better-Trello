@@ -81,21 +81,23 @@ export default {
             if(cardTitle.length == 0) return;
 
             console.log("Adding card: " + this.cardTitle);
-            this.column.cards.push({title: cardTitle});
             this.addCard(cardTitle)
             this.cardTitle = "";
             this.setFocusOnTextField();
         },
 
         setFocusOnTextField() {
-            setTimeout(() => {  this.$refs.nameField.focus(); }, 50);
+          setTimeout(() => {  this.$refs.nameField.focus(); }, 50);
         },
 
         addCard(cardTitle) {
-            this.axios
+          this.axios
                 .post(`/boards/${this.column.board_id}/columns/${this.column.id}/cards`, {title: cardTitle})
                 .then((res) => {
-                console.log("Card added")
+                  if (res.data) {
+                    console.log("Card added ", JSON.stringify(res.data), res.title)
+                    this.column.cards.push({id: res.data.id, title: res.data.title}); 
+                  }
                 });
             }
     },
