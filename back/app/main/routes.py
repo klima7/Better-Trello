@@ -127,35 +127,71 @@ def card_patch(card_id):
         card.description = description
 
     if 'column' in request.json:
-        _change_card_column(card, request.json['column'])
+        response = _change_card_column(card, request.json['column'])
+        if response: return response
 
     if 'order' in request.json:
-        _change_card_order()
+        response = _change_card_order(card, request.json['order'])
+        if response: return response
 
     db.session.commit()
     return {}, 200
 
 
 def _change_card_column(card, new_column_id):
-    _decrement_next_cards_order(card.id)
+    current_column = Column.query.filter_by(id=card.column_id).first()
+    new_column = Column.query.filter_by(id=new_column_id).first()
 
-    last_card = Card.query.filter_by(column_id=new_column_id).order_by(Card.order.desc()).first()
-    next_card_order = last_card.order+1 if last_card else 0
+    if current_column.id == new_column.id:
+        return None
 
-    card.column_id = new_column_id
-    card.order = next_card_order
+    print('Changing column')
+
+    if not current_column or not new_column:
+        return 'Column not found', 404
+
+    if current_column.board_id != new_column.board_id:
+        return 'Unable to move columns between boards', 400
+
+    _delete_card_from_column(card, current_column)
+    _add_card_to_column(card, new_column)
 
 
-def _decrement_next_cards_order(card_id):
-    card_to_remove = Card.query.filter_by(id=card_id).first()
+def _delete_card_from_column(card_to_remove, column):
     cards = Card.query.filter_by(column_id=card_to_remove.column_id).all()
-    cards = [card for card in cards if card.order > card.order]
+    cards = [card for card in cards if card.order > card_to_remove.order]
     for card in cards:
         card.order -= 1
+    column.cards.remove(card_to_remove)
 
 
-def _change_card_order():
-    ...
+def _add_card_to_column(card_to_add, column):
+    db.session.add(card_to_add)
+    db.session.add(column)
+    last_card = Card.query.filter_by(column_id=column.id).order_by(Card.order.desc()).first()
+    next_card_order = last_card.order+1 if last_card else 0
+    card_to_add.order = next_card_order
+    column.cards.append(card_to_add)
+
+
+def _change_card_order(card, new_order):
+    old_order = card.order
+    if old_order == new_order:
+        return
+
+    order_min = min(old_order, new_order)
+    order_max = max(old_order, new_order)
+
+    cards = Card.query.filter_by(column_id=card.column_id).all()
+    cards = [card for card in cards if order_min <= card.order <= order_max]
+
+    for card in cards:
+        if card.order == old_order:
+            card.order = new_order
+        elif new_order > old_order:     # moving right
+            card.order -= 1
+        else:   # moving left
+            card.order += 1
 
 
 @main.route('/boards/<int:board_id>/columns/<int:column_id>/cards', methods=['POST'])
@@ -220,7 +256,7 @@ def column_add(board_id):
     db.session.add(column)
     db.session.commit()
 
-    return {}, 200
+    return column.toJSON(), 200
 
 
 @main.route('/columns/<int:column_id>', methods=['PATCH'])
@@ -256,17 +292,13 @@ def _move_column(board, column, new_order):
 
     columns = Column.query.filter_by(board_id=board.id).all()
     columns = [column for column in columns if order_min <= column.order <= order_max]
-    print([column.order for column in columns])
 
     for column in columns:
         if column.order == old_order:
-            print(f'Moving {column.order} - {new_order}')
             column.order = new_order
         elif new_order > old_order:     # moving right
-            print(f'Moving {column.order} - {column.order-1}')
             column.order -= 1
         else:   # moving left
-            print(f'Moving {column.order} - {column.order + 1}')
             column.order += 1
         db.session.add(column)
 

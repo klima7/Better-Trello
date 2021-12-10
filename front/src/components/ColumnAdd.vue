@@ -81,12 +81,7 @@ export default {
     secondAddClicked() {
       const columnName = this.columnName.trim();
       if(columnName.length == 0) return;
-
-      console.log("Adding column: " + this.columnName);
-      this.board.columns.push({name: columnName, cards: []});
       this.addColumn(columnName);
-      this.columnName = "";
-      this.setFocusOnTextField();
     },
 
     setFocusOnTextField() {
@@ -97,7 +92,12 @@ export default {
       this.axios
       .post(`/boards/${this.board.id}/columns`, {name: columnName})
       .then((res) => {
-        console.log("Column added")
+        if(res.data) {
+          this.board.columns.push(res.data);
+          this.columnName = "";
+          this.setFocusOnTextField();
+          console.log("Column added")
+        }
       });
     }
   },

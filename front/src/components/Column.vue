@@ -64,8 +64,8 @@ export default {
 
     onCardDrop: function(event) {
       const cardId = this.cardMoveEvent.draggedContext.element.id;
-      const sourceColumn = this.cardMoveEvent.from.id;
-      const targetColumn = this.cardMoveEvent.to.id;
+      const sourceColumn = parseInt(this.cardMoveEvent.from.id);
+      const targetColumn = parseInt(this.cardMoveEvent.to.id);
       const sourcePosition = this.cardMoveEvent.draggedContext.index;
       const targetPosition = this.cardMoveEvent.draggedContext.futureIndex;
 

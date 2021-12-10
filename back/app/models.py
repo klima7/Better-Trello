@@ -21,10 +21,6 @@ class User(db.Model):
 
 
 class Card(db.Model):
-    __table_args__ = (
-        db.UniqueConstraint('column_id', 'order', name='column_order_constraint'),
-    )
-
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(30))
     description = db.Column(db.String)
