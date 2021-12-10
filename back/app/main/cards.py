@@ -87,42 +87,6 @@ def card_patch(card_id):
     return {}, 200
 
 
-def _change_card_column(card, new_column_id):
-    current_column = Column.query.filter_by(id=card.column_id).first()
-    new_column = Column.query.filter_by(id=new_column_id).first()
-
-    if current_column.id == new_column.id:
-        return None
-
-    print('Changing column')
-
-    if not current_column or not new_column:
-        return 'Column not found', 404
-
-    if current_column.board_id != new_column.board_id:
-        return 'Unable to move columns between boards', 400
-
-    _delete_card_from_column(card, current_column)
-    _add_card_to_column(card, new_column)
-
-
-def _delete_card_from_column(card_to_remove, column):
-    cards = Card.query.filter_by(column_id=card_to_remove.column_id).all()
-    cards = [card for card in cards if card.order > card_to_remove.order]
-    for card in cards:
-        card.order -= 1
-    column.cards.remove(card_to_remove)
-
-
-def _add_card_to_column(card_to_add, column):
-    db.session.add(card_to_add)
-    db.session.add(column)
-    last_card = Card.query.filter_by(column_id=column.id).order_by(Card.order.desc()).first()
-    next_card_order = last_card.order + 1 if last_card else 0
-    card_to_add.order = next_card_order
-    column.cards.append(card_to_add)
-
-
 def _change_card_order(card, new_order):
     old_order = card.order
     if old_order == new_order:
@@ -131,13 +95,44 @@ def _change_card_order(card, new_order):
     order_min = min(old_order, new_order)
     order_max = max(old_order, new_order)
 
-    cards = Card.query.filter_by(column_id=card.column_id).all()
-    cards = [card for card in cards if order_min <= card.order <= order_max]
+    cards = card.column.cards
 
-    for card in cards:
+    if new_order < 0 or new_order >= len(cards):
+        return 'Unable to move card to given position', 400
+
+    cards_to_modify = [card for card in cards if order_min <= card.order <= order_max]
+
+    for card in cards_to_modify:
         if card.order == old_order:
             card.order = new_order
-        elif new_order > old_order:  # moving right
+        elif new_order > old_order:
             card.order -= 1
-        else:  # moving left
+        else:
             card.order += 1
+
+
+def _change_card_column(card, new_column_id):
+    current_column = card.column
+    new_column = Column.query.filter_by(id=new_column_id).first_or_404()
+
+    if current_column.id == new_column.id:
+        return None
+
+    if current_column.board_id != new_column.board_id:
+        return 'Unable to move columns between boards', 400
+
+    _delete_card_from_column(card)
+    _add_card_to_column(card, new_column)
+
+
+def _delete_card_from_column(card_to_remove):
+    cards = card_to_remove.column.cards
+    cards_to_modify = [card for card in cards if card.order > card_to_remove.order]
+    for card in cards_to_modify:
+        card.order -= 1
+    card_to_remove.column.cards.remove(card_to_remove)
+
+
+def _add_card_to_column(card, column):
+    card.order = column.next_card_order
+    column.cards.append(card)

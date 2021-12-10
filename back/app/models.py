@@ -21,6 +21,7 @@ class User(db.Model):
 
 
 class Card(db.Model):
+
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(30))
     description = db.Column(db.String)
@@ -41,6 +42,15 @@ class Column(db.Model):
 
     def toJSON(self):
         return {"id": self.id, "name": self.name}
+
+    @property
+    def last_card(self):
+        return Card.query.filter_by(column_id=self.id).order_by(Card.order.desc()).first()
+
+    @property
+    def next_card_order(self):
+        last_card = self.last_card
+        return last_card.order+1 if last_card else 0
 
 
 class Board(db.Model):

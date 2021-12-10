@@ -38,25 +38,22 @@ def column_add(board_id):
 def column_patch(column_id):
     user = auth.current_user()
 
-    column = Column.query.filter_by(id=column_id).first()
-    if column is None:
-        return 'Column not found', 404
+    column = Column.query.filter_by(id=column_id).first_or_404()
 
-    board = Board.query.filter_by(id=column.board_id).first()
-    if board.user_id != user.id:
-        return 'User is not owner of this board', 403
+    if column.board.user != user:
+        return 'User not permitted to edit column', 400
 
     if request.json is None:
         return {}, 200
 
     if 'order' in request.json:
-        _move_column(board, column, request.json['order'])
+        _move_column(column, request.json['order'])
 
     db.session.commit()
     return {}, 200
 
 
-def _move_column(board, column, new_order):
+def _move_column(column, new_order):
     old_order = column.order
     if old_order == new_order:
         return
@@ -64,14 +61,17 @@ def _move_column(board, column, new_order):
     order_min = min(old_order, new_order)
     order_max = max(old_order, new_order)
 
-    columns = Column.query.filter_by(board_id=board.id).all()
-    columns = [column for column in columns if order_min <= column.order <= order_max]
+    columns = column.board.columns
 
-    for column in columns:
+    if new_order < 0 or new_order >= len(columns):
+        return 'Invalid order provided'
+
+    columns_to_modify = [column for column in columns if order_min <= column.order <= order_max]
+
+    for column in columns_to_modify:
         if column.order == old_order:
             column.order = new_order
         elif new_order > old_order:     # moving right
             column.order -= 1
         else:   # moving left
             column.order += 1
-        db.session.add(column)
