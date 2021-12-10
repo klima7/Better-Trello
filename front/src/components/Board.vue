@@ -68,10 +68,6 @@ export default {
       const columnId = this.board.columns[event.newIndex].id;
       const oldPosition = event.oldIndex;
       const newPosition = event.newIndex;
-      console.log("Column:", columnId);
-      console.log("From position:", oldPosition);
-      console.log("To position:", newPosition);
-      console.log("-----------");
       this.moveColumn(columnId, newPosition);
     },
     
@@ -86,7 +82,6 @@ export default {
 
     moveColumn(columnId, targetPosition) {
       console.log("Moving column");
-      console.log("Board id:", this.board.id)
       this.axios
         .patch(`/columns/${columnId}`, {order: targetPosition})
         .then((res) => {

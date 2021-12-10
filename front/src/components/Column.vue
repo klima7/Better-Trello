@@ -8,7 +8,7 @@
     <v-card-title class="text-h5">{{ column.name }}</v-card-title>
     <div>
       <draggable
-        :id="column.name"
+        :id="column.id"
         class="draggable-list"
         group="my-group"
         animation="200"
@@ -63,16 +63,33 @@ export default {
     },
 
     onCardDrop: function(event) {
-      console.log("Element:", this.cardMoveEvent.draggedContext.element.title)
-      console.log("From column:", this.cardMoveEvent.from.id)
-      console.log("To column:", this.cardMoveEvent.to.id)
-      console.log("From position:", this.cardMoveEvent.draggedContext.index)
-      console.log("To position:", this.cardMoveEvent.draggedContext.futureIndex)
+      const cardId = this.cardMoveEvent.draggedContext.element.id;
+      const sourceColumn = this.cardMoveEvent.from.id;
+      const targetColumn = this.cardMoveEvent.to.id;
+      const sourcePosition = this.cardMoveEvent.draggedContext.index;
+      const targetPosition = this.cardMoveEvent.draggedContext.futureIndex;
+
+      console.log("Element:", cardId);
+      console.log("From column:", sourceColumn);
+      console.log("To column:", targetColumn);
+      console.log("From position:", sourcePosition)
+      console.log("To position:", targetPosition)
       console.log("-----------")
+
+      this.moveCard(cardId, targetColumn, targetPosition)
     },
 
     showCardDetails: function(e) {
       this.$emit("show-card-details", e);
+    },
+
+    moveCard(cardId, targetColumn, targetPosition) {
+      console.log("Moving card");
+      this.axios
+        .patch(`/cards/${cardId}`, {column: targetColumn, order: targetPosition})
+        .then((res) => {
+          console.log("Card moved")
+        });
     }
   }
 };

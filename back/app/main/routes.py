@@ -93,7 +93,7 @@ def board_patch(board_id):
 
 @main.route('/cards/<int:card_id>', methods=['PATCH'])
 @auth.login_required
-def card_update(card_id):
+def card_patch(card_id):
     user = auth.current_user()
 
     card = Card.query.filter_by(id=card_id).first()
@@ -111,20 +111,52 @@ def card_update(card_id):
     if board.user_id != user.id:
         return 'User is not owner of this board', 403
 
-    if request.json and 'title' in request.json:
+    if request.json is None:
+        return {}, 200
+
+    if 'title' in request.json:
         title = request.json['title']
         if len(title) == 0 or len(title) > 4096:
             return 'Invalid title length', 400
         card.title = title
 
-    if request.json and 'description' in request.json:
+    if 'description' in request.json:
         description = request.json['description']
         if len(description) == 0 or len(description) > 4096:
             return 'Invalid description length', 400
         card.description = description
 
+    if 'column' in request.json:
+        _change_card_column(card, request.json['column'])
+
+    if 'order' in request.json:
+        _change_card_order()
+
     db.session.commit()
     return {}, 200
+
+
+def _change_card_column(card, new_column_id):
+    _decrement_next_cards_order(card.id)
+
+    last_card = Card.query.filter_by(column_id=new_column_id).order_by(Card.order.desc()).first()
+    next_card_order = last_card.order+1 if last_card else 0
+
+    card.column_id = new_column_id
+    card.order = next_card_order
+
+
+def _decrement_next_cards_order(card_id):
+    card_to_remove = Card.query.filter_by(id=card_id).first()
+    cards = Card.query.filter_by(column_id=card_to_remove.column_id).all()
+    cards = [card for card in cards if card.order > card.order]
+    for card in cards:
+        card.order -= 1
+
+
+def _change_card_order():
+    ...
+
 
 @main.route('/boards/<int:board_id>/columns/<int:column_id>/cards', methods=['POST'])
 @auth.login_required
@@ -204,7 +236,10 @@ def column_patch(column_id):
     if board.user_id != user.id:
         return 'User is not owner of this board', 403
 
-    if request.json and 'order' in request.json:
+    if request.json is None:
+        return {}, 200
+
+    if 'order' in request.json:
         _move_column(board, column, request.json['order'])
 
     db.session.commit()
@@ -234,3 +269,4 @@ def _move_column(board, column, new_order):
             print(f'Moving {column.order} - {column.order + 1}')
             column.order += 1
         db.session.add(column)
+
