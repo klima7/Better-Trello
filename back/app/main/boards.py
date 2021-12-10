@@ -2,6 +2,7 @@ from . import main
 from .. import auth
 from flask import request, jsonify
 from app.models import *
+import app.realtime as realtime
 
 
 @main.route('/boards', methods=['GET'])
@@ -82,5 +83,6 @@ def board_patch(board_id):
             return 'Invalid name length', 400
         board.name = name
 
+    realtime.notify_board_changed(board_id)
     db.session.commit()
     return {}, 200

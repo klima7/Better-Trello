@@ -2,6 +2,7 @@ from . import main
 from .. import auth
 from flask import request
 from app.models import *
+import app.realtime as realtime
 
 
 @main.route('/boards/<int:board_id>/columns/<int:column_id>/cards', methods=['POST'])
@@ -37,6 +38,7 @@ def card_add(board_id, column_id):
     db.session.add(card)
     db.session.commit()
 
+    realtime.notify_board_changed(board.id)
     return card.toJSON(), 200
 
 
@@ -83,6 +85,7 @@ def card_patch(card_id):
         response = _change_card_order(card, request.json['order'])
         if response: return response
 
+    realtime.notify_board_changed(board.id)
     db.session.commit()
     return {}, 200
 

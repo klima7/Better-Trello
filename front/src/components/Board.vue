@@ -81,12 +81,8 @@ export default {
     },
 
     moveColumn(columnId, targetPosition) {
-      console.log("Moving column");
       this.axios
         .patch(`/columns/${columnId}`, {order: targetPosition})
-        .then((res) => {
-          console.log("Column moved")
-        });
     }
   }
 

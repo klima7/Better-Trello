@@ -3,6 +3,7 @@ from flask_cors import CORS
 from flask_httpauth import HTTPTokenAuth
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
+from flask_socketio import SocketIO
 from config import Config
 
 # Creating app
@@ -16,6 +17,7 @@ CORS(app)
 db = SQLAlchemy(app)
 ma = Marshmallow(app)
 auth = HTTPTokenAuth(scheme='Bearer')
+socketio = SocketIO(app, cors_allowed_origins='*')
 
 # Database initialization
 from app.models import *

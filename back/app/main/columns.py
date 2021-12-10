@@ -2,6 +2,7 @@ from . import main
 from .. import auth
 from flask import request
 from app.models import *
+import app.realtime as realtime
 
 
 @main.route('/boards/<int:board_id>/columns', methods=['POST'])
@@ -30,6 +31,7 @@ def column_add(board_id):
     db.session.add(column)
     db.session.commit()
 
+    realtime.notify_board_changed(board_id)
     return column.toJSON(), 200
 
 
@@ -49,6 +51,7 @@ def column_patch(column_id):
     if 'order' in request.json:
         _move_column(column, request.json['order'])
 
+    realtime.notify_board_changed(column.board_id)
     db.session.commit()
     return {}, 200
 

@@ -69,13 +69,6 @@ export default {
       const sourcePosition = this.cardMoveEvent.draggedContext.index;
       const targetPosition = this.cardMoveEvent.draggedContext.futureIndex;
 
-      console.log("Element:", cardId);
-      console.log("From column:", sourceColumn);
-      console.log("To column:", targetColumn);
-      console.log("From position:", sourcePosition)
-      console.log("To position:", targetPosition)
-      console.log("-----------")
-
       this.moveCard(cardId, targetColumn, targetPosition)
     },
 
@@ -84,12 +77,8 @@ export default {
     },
 
     moveCard(cardId, targetColumn, targetPosition) {
-      console.log("Moving card");
       this.axios
         .patch(`/cards/${cardId}`, {column: targetColumn, order: targetPosition})
-        .then((res) => {
-          console.log("Card moved")
-        });
     }
   }
 };
