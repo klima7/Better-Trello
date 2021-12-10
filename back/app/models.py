@@ -6,7 +6,7 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(120), index=True, unique=True)
     password_hash = db.Column(db.String(128))
-    boards = db.relationship("Board", backref="board", lazy='select')
+    boards = db.relationship("Board", backref="user", lazy='select')
 
     @property
     def password(self):
@@ -35,7 +35,7 @@ class Column(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(40))
-    cards = db.relationship("Card", backref="card", lazy='select')
+    cards = db.relationship("Card", backref="column", lazy='select')
     board_id = db.Column(db.Integer, db.ForeignKey('board.id'))
     order = db.Column(db.Integer)
 
@@ -47,7 +47,7 @@ class Board(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(40))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    columns = db.relationship("Column", backref="column", lazy='select')
+    columns = db.relationship("Column", backref="board", lazy='select')
 
     def toJSON(self):
         return {"name": self.name}
