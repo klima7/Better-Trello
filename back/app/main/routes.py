@@ -56,9 +56,9 @@ def get_board_info():
 
     # Output
     columns_dict = []
-    columns = Column.query.filter_by(board_id=board_id).all()
+    columns = Column.query.filter_by(board_id=board_id).order_by(Column.order.asc()).all()
     for column in columns:
-        cards = Card.query.filter_by(column_id=column.id).all()
+        cards = Card.query.filter_by(column_id=column.id).order_by(Card.order.asc()).all()
         all_cards = []
         for card in cards:
             all_cards.append(card.toJSON())
@@ -71,7 +71,7 @@ def get_board_info():
 
 @main.route('/boards/<int:board_id>', methods=['PATCH'])
 @auth.login_required
-def board_update(board_id):
+def board_patch(board_id):
     user = auth.current_user()
 
     board = Board.query.filter_by(id=board_id).first()
@@ -151,7 +151,6 @@ def card_add(board_id, column_id):
     
     if column.board_id != board_id:
         return 'Column does not belong to this board', 403
-    
 
     last_card = Card.query.filter_by(column_id=column_id).order_by(Card.order.desc()).first()
     last_card_id = last_card.order if last_card else 0
@@ -190,3 +189,48 @@ def column_add(board_id):
     db.session.commit()
 
     return {}, 200
+
+
+@main.route('/columns/<int:column_id>', methods=['PATCH'])
+@auth.login_required
+def column_patch(column_id):
+    user = auth.current_user()
+
+    column = Column.query.filter_by(id=column_id).first()
+    if column is None:
+        return 'Column not found', 404
+
+    board = Board.query.filter_by(id=column.board_id).first()
+    if board.user_id != user.id:
+        return 'User is not owner of this board', 403
+
+    if request.json and 'order' in request.json:
+        _move_column(board, column, request.json['order'])
+
+    db.session.commit()
+    return {}, 200
+
+
+def _move_column(board, column, new_order):
+    old_order = column.order
+    if old_order == new_order:
+        return
+
+    order_min = min(old_order, new_order)
+    order_max = max(old_order, new_order)
+
+    columns = Column.query.filter_by(board_id=board.id).all()
+    columns = [column for column in columns if order_min <= column.order <= order_max]
+    print([column.order for column in columns])
+
+    for column in columns:
+        if column.order == old_order:
+            print(f'Moving {column.order} - {new_order}')
+            column.order = new_order
+        elif new_order > old_order:     # moving right
+            print(f'Moving {column.order} - {column.order-1}')
+            column.order -= 1
+        else:   # moving left
+            print(f'Moving {column.order} - {column.order + 1}')
+            column.order += 1
+        db.session.add(column)

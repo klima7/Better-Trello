@@ -65,10 +65,14 @@ export default {
 
   methods: {
     onColumnDrop: function(event) {
-      console.log("Column:", this.board.columns[event.newIndex].name)
-      console.log("From position:", event.oldIndex)
-      console.log("To position:", event.newIndex)
-      console.log("-----------")
+      const columnId = this.board.columns[event.newIndex].id;
+      const oldPosition = event.oldIndex;
+      const newPosition = event.newIndex;
+      console.log("Column:", columnId);
+      console.log("From position:", oldPosition);
+      console.log("To position:", newPosition);
+      console.log("-----------");
+      this.moveColumn(columnId, newPosition);
     },
     
     showCardDetails: function(event) {
@@ -78,6 +82,16 @@ export default {
 
     hideCardDetails: function(event) {
       this.detailsVisible = event;
+    },
+
+    moveColumn(columnId, targetPosition) {
+      console.log("Moving column");
+      console.log("Board id:", this.board.id)
+      this.axios
+        .patch(`/columns/${columnId}`, {order: targetPosition})
+        .then((res) => {
+          console.log("Column moved")
+        });
     }
   }
 
