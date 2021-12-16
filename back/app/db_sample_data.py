@@ -42,8 +42,17 @@ def add_sample_data():
 
     board2 = Board(name='Barlates Complete Workout List', columns=[col4, col5, col6, col7])
 
+    card16 = Card(order=0, title='card', description='Tube snake boogie')
+    col8 = Column(order=3, name='column', cards=[card16])
+    board3 = Board(name='b3', columns=[col8])
+
     user = User(email='test@test.com', password="testtest", boards=[board1, board2])
+    user2 = User(email='zz@top.com', password="zztop", boards=[board3])
+    user2.shared_boards.append(board1)
+    user2.shared_boards.append(board2)
+    board3.shared_users.append(user)
 
     # FINISH
     db.session.add(user)
+    db.session.add(user2)
     db.session.commit()

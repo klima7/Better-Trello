@@ -26,7 +26,17 @@
         </v-row>
 
         <v-row>
-            <BoardTile v-for="board in boards" :key="board.id" :board="board" />
+            <BoardTile v-for="board in owned_boards" :key="board.id" :board="board" />
+        </v-row>
+
+		<v-row>
+            <v-col>
+                <h1>Udostępnione tablice innych użytkowników</h1>
+            </v-col>
+        </v-row>
+
+        <v-row>
+            <BoardTile v-for="board in shared_boards" :key="board.id" :board="board" />
         </v-row>
 
 	</v-container>
@@ -41,7 +51,8 @@
 		data() {
 			return {
 				new_board_name: "",
-				boards: [],
+				owned_boards: [],
+				shared_boards: [],
 				rules: [
 					(value) => !!value || "Pole wymagane!",
 					(value) => (value || "").length <= 40 || "Maksymalna długość nazwy tablicy: 40 znaków!",
@@ -53,18 +64,19 @@
 		},
 		methods: {
 			boardSelected(id) {
-				alert("nie wiem czy to będzie potrzebne tutaj: " + id);
 			},
 			fetchBoardList() {
 				axios.get('/boards')
 				.then((response) => {
 					console.log(response);
-					this.boards = response.data;
+					this.owned_boards = response.data.owned_boards;
+					this.shared_boards = response.data.shared_boards;
 				})
 				// eslint-disable-next-line no-unused-vars
 				.catch((error) =>  {
 					console.log(`Sorry sir no boards here. ${error}`);
-					this.boards = [];
+					this.owned_boards = [];
+					this.shared_boards = [];
 				})
 			},
 			addBoard() {
@@ -86,7 +98,6 @@
 			}
 		},
 		created() {
-			console.log("anybody here");
 			this.fetchBoardList();
 		}
 	}

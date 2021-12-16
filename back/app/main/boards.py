@@ -9,10 +9,17 @@ import app.realtime as realtime
 @auth.login_required
 def get_board_list():
     user = auth.current_user()
-    boards = Board.query.filter_by(user_id=user.id).all()
-    return jsonify([
-        {"id": b.id, "name": b.name} for b in boards
-    ])
+    # boards = Board.query.filter_by(user_id=user.id).all()
+    # shared_boards = Board.query.filter_by(user_id=user.id).all()
+
+    print(user.shared_boards)
+
+    return jsonify(
+        {
+            "owned_boards" : [{"id": b.id, "name": b.name} for b in user.boards],
+            "shared_boards": [{"id": b.id, "name": b.name} for b in user.shared_boards]
+        }
+    )
 
 
 @main.route('/boards', methods=['POST'])
@@ -46,9 +53,13 @@ def get_board_info():
 
     # Get board
     board_id = request.json['id']
-    board_json = Board.query.filter_by(user_id=user.id, id=board_id).first().toJSON()
+    board_json = Board.query.filter_by(user_id=user.id, id=board_id).first()
     if board_json is None:
-        return 'Board not found', 404
+        board_json = Board.query.filter_by(id=board_id).filter(Board.shared_users.any(User.id == user.id)).first()
+        if board_json is None:
+            return 'Board not found', 404
+            
+    board_json = board_json.toJSON()
 
     # Output
     columns_dict = []
