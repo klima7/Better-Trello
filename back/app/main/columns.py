@@ -21,7 +21,7 @@ def column_add(board_id):
     if board is None:
         return 'Board not found', 404
 
-    if board.user_id != user.id:
+    if not board.userHasAccess(user.id): #board.user_id != user.id:
         return 'User is not owner of this board', 403
 
     last_column = Column.query.filter_by(board_id=board_id).order_by(Column.order.desc()).first()
@@ -42,7 +42,7 @@ def column_patch(column_id):
 
     column = Column.query.filter_by(id=column_id).first_or_404()
 
-    if column.board.user != user:
+    if not column.board.userHasAccess(user.id): #column.board.user != user:
         return 'User not permitted to edit column', 400
 
     if request.json is None:

@@ -26,7 +26,7 @@
         </v-row>
 
         <v-row>
-            <BoardTile v-for="board in owned_boards" :key="board.id" :board="board" />
+            <BoardTile v-for="board in owned_boards" :key="board.id" :board="board" v-on:share="openSharing" />
         </v-row>
 
 		<v-row>
@@ -38,7 +38,11 @@
         <v-row>
             <BoardTile v-for="board in shared_boards" :key="board.id" :board="board" />
         </v-row>
-
+		<ShareDialog 
+			v-model="sharing_dialog_opened"
+			v-on:hide="hideShareDialog"
+			v-on:share-change="sharechange"
+			:board="sharing_board"/>
 	</v-container>
 </template>
 
@@ -46,6 +50,7 @@
 
 	const axios = require('axios').default;
 	import BoardTile from "@/components/BoardTile.vue";
+	import ShareDialog from "@/components/ShareDialog.vue";
 
 	export default {
 		data() {
@@ -53,6 +58,8 @@
 				new_board_name: "",
 				owned_boards: [],
 				shared_boards: [],
+				sharing_dialog_opened: false,
+				sharing_board: {name: "aa", shared_users: []},
 				rules: [
 					(value) => !!value || "Pole wymagane!",
 					(value) => (value || "").length <= 40 || "Maksymalna długość nazwy tablicy: 40 znaków!",
@@ -60,13 +67,17 @@
 			}
 		},
 		components: {
-			BoardTile
+			BoardTile,
+			ShareDialog
 		},
 		methods: {
+			sharechange() {
+				this.fetchBoardList();
+			},
 			boardSelected(id) {
 			},
 			fetchBoardList() {
-				axios.get('/boards')
+				this.axios.get('/boards')
 				.then((response) => {
 					console.log(response);
 					this.owned_boards = response.data.owned_boards;
@@ -95,6 +106,16 @@
 				.catch((error) => {
 					console.log('Error occurred while adding' + this.new_board_name);
 				});	
+			},
+			hideShareDialog() {
+				this.sharing_dialog_opened = false;
+				this.sharing_board = null;
+			},
+			openSharing(board) {
+				console.log("got board");
+				console.log(JSON.stringify(board));
+				this.sharing_board = board;
+				this.sharing_dialog_opened = true;
 			}
 		},
 		created() {

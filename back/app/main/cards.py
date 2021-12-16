@@ -21,7 +21,7 @@ def card_add(board_id, column_id):
     if board is None:
         return 'Board not found', 404
 
-    if board.user_id != user.id:
+    if not board.userHasAccess(user.id): #board.user_id != user.id:
         return 'User is not owner of this board', 403
 
     column = Column.query.filter_by(id=column_id).first()
@@ -59,7 +59,7 @@ def card_patch(card_id):
     if board is None:
         return 'Board for column not found', 404
 
-    if board.user_id != user.id:
+    if not board.userHasAccess(user.id): #board.user_id != user.id:
         return 'User is not owner of this board', 403
 
     if request.json is None:

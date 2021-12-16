@@ -16,7 +16,7 @@ def get_board_list():
 
     return jsonify(
         {
-            "owned_boards" : [{"id": b.id, "name": b.name} for b in user.boards],
+            "owned_boards" : [{"id": b.id, "name": b.name, "shared_users": [u.email for u in b.shared_users]} for b in user.boards],
             "shared_boards": [{"id": b.id, "name": b.name} for b in user.shared_boards]
         }
     )
@@ -53,11 +53,11 @@ def get_board_info():
 
     # Get board
     board_id = request.json['id']
-    board_json = Board.query.filter_by(user_id=user.id, id=board_id).first()
-    if board_json is None:
-        board_json = Board.query.filter_by(id=board_id).filter(Board.shared_users.any(User.id == user.id)).first()
-        if board_json is None:
-            return 'Board not found', 404
+    board_json = Board.query.filter_by(id=board_id).first()
+    if board_json is None or not board_json.userHasAccess(user.id):
+        # board_json = Board.query.filter_by(id=board_id).filter(Board.shared_users.any(User.id == user.id)).first()
+        # if board_json is None:
+        return 'Board not found', 404
             
     board_json = board_json.toJSON()
 
@@ -85,7 +85,7 @@ def board_patch(board_id):
     if board is None:
         return 'Board not found', 404
 
-    if board.user_id != user.id:
+    if not board.userHasAccess(user.id):# board.user_id != user.id:
         return 'User is not owner of this board', 403
 
     if request.json and 'name' in request.json:
@@ -93,6 +93,31 @@ def board_patch(board_id):
         if len(name) == 0 or len(name) > 30:
             return 'Invalid name length', 400
         board.name = name
+
+    realtime.notify_board_changed(board_id)
+    db.session.commit()
+    return {}, 200
+
+@main.route('/boards/<int:board_id>/share', methods=['POST'])
+@auth.login_required
+def share_board(board_id):
+    user = auth.current_user()
+
+    board = Board.query.filter_by(id=board_id).first()
+    if board is None:
+        return 'Board not found', 404
+
+    if not board.userHasAccess(user.id):
+        return 'User is not owner of this board', 403
+
+    if request.json and 'email' in request.json:
+        email = request.json['email']
+        user_sharing = User.query.filter_by(email=email).first()
+        if user_sharing and not board.userHasAccess(user_sharing.id):
+            board.shared_users.append(user_sharing)
+        # if len(name) == 0 or len(name) > 30:
+        #     return 'Invalid name length', 400
+        # board.name = name
 
     realtime.notify_board_changed(board_id)
     db.session.commit()

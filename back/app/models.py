@@ -76,3 +76,9 @@ class Board(db.Model):
 
     def toJSON(self):
         return {"name": self.name}
+
+    def userHasAccess(self, user_id):
+        if user_id == self.user_id:
+            return True
+        b = Board.query.filter_by(id=self.id).filter(Board.shared_users.any(User.id == user_id)).first()
+        return b != None
