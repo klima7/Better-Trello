@@ -38,7 +38,17 @@ export default {
           );
         });
     },
-  },
+  }
+  ,
+  // sockets: {
+  //   connect: function() {
+
+  //   },
+  //   "board-changed": function(data) {
+  //     console.log("refreshing");
+  //     this.fetchBoardInfo();
+  //   }
+  // },
   created() {
     this.fetchBoardInfo();
     this.socket.on("board-changed", (socket) => {

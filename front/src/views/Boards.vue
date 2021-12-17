@@ -38,10 +38,15 @@
         <v-row>
             <BoardTile v-for="board in shared_boards" :key="board.id" :board="board" />
         </v-row>
+
+        <v-row>
+			<v-col>
+				{{ this.$store.getters.user }}
+			</v-col>
+        </v-row>
 		<ShareDialog 
 			v-model="sharing_dialog_opened"
 			v-on:hide="hideShareDialog"
-			v-on:share-change="sharechange"
 			:board="sharing_board"/>
 	</v-container>
 </template>
@@ -51,10 +56,12 @@
 	const axios = require('axios').default;
 	import BoardTile from "@/components/BoardTile.vue";
 	import ShareDialog from "@/components/ShareDialog.vue";
+	import SocketIO from "socket.io-client";
 
 	export default {
 		data() {
 			return {
+				socket: SocketIO(process.env.VUE_APP_BACKEND_URL+'/usersz/'+ this.$store.getters.user.id, { transports : ['websocket']}),
 				new_board_name: "",
 				owned_boards: [],
 				shared_boards: [],
@@ -63,7 +70,9 @@
 				rules: [
 					(value) => !!value || "Pole wymagane!",
 					(value) => (value || "").length <= 40 || "Maksymalna długość nazwy tablicy: 40 znaków!",
-				],
+				]
+				// ,
+				// user: 
 			}
 		},
 		components: {
@@ -71,17 +80,24 @@
 			ShareDialog
 		},
 		methods: {
-			sharechange() {
-				this.fetchBoardList();
-			},
 			boardSelected(id) {
 			},
 			fetchBoardList() {
 				this.axios.get('/boards')
 				.then((response) => {
-					console.log(response);
+					console.log(response.data);
 					this.owned_boards = response.data.owned_boards;
 					this.shared_boards = response.data.shared_boards;
+
+					if (this.sharing_dialog_opened) {
+						var sh_board = this.sharing_board;
+						for (let b of this.owned_boards) {
+							if (b.id == sh_board.id) {
+								this.sharing_board = b;
+								break;
+							}
+						}
+					}
 				})
 				// eslint-disable-next-line no-unused-vars
 				.catch((error) =>  {
@@ -120,6 +136,10 @@
 		},
 		created() {
 			this.fetchBoardList();
+			this.socket.on("users-board-changed", (socket) => {
+				console.log("Refreshing boards");
+				this.fetchBoardList();
+			});
 		}
 	}
 </script>

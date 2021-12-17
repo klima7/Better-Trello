@@ -119,6 +119,43 @@ def share_board(board_id):
         #     return 'Invalid name length', 400
         # board.name = name
 
-    realtime.notify_board_changed(board_id)
-    db.session.commit()
+        realtime.notify_user(user.id)
+        for u in board.shared_users:
+            realtime.notify_user(u.id)
+        db.session.commit()
+    return {}, 200
+
+
+@main.route('/boards/<int:board_id>/sharestop', methods=['POST'])
+@auth.login_required
+def stop_sharing_board(board_id):
+    user = auth.current_user()
+
+    board = Board.query.filter_by(id=board_id).first()
+    if board is None:
+        return 'Board not found', 404
+
+    if not board.userHasAccess(user.id):
+        return 'User is not owner of this board', 403
+
+    print("request json " + str(request.json))
+
+    if request.json and 'email' in request.json:
+        email = request.json['email']
+        user_sharing = User.query.filter_by(email=email).first()
+        if user_sharing and user_sharing in board.shared_users:
+            board.shared_users.remove(user_sharing)
+            print("deleted user: " + user_sharing.email)
+        else:
+            print("something not right: ", user_sharing, user_sharing in board.shared_users)
+
+        # if len(name) == 0 or len(name) > 30:
+        #     return 'Invalid name length', 400
+        # board.name = name
+
+        realtime.notify_user(user.id)
+        realtime.notify_user(user_sharing.id)
+        # for u in board.shared_users:
+        #     realtime.notify_user(u.id)
+        db.session.commit()
     return {}, 200

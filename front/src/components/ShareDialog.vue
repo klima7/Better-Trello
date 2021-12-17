@@ -50,6 +50,7 @@
 										<v-btn 
 											v-bind="attrs"
 											v-on="on"
+											@click="removeUser(user)"
 											icon>
 											<v-icon>mdi-account-remove</v-icon>
 										</v-btn>
@@ -87,7 +88,18 @@ export default {
 			this.axios.post(`/boards/${this.board.id}/share`, {email: this.newUser})
 			.then((res) => {
 				console.log("Sharing succeded");
-				this.$emit('share-change', 0);
+				// this.$emit('share-change', 0);
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+		},
+		removeUser: function(u) {
+			console.log("removing " + u);
+			this.axios.post(`/boards/${this.board.id}/sharestop`, {email: u})
+			.then((res) => {
+				console.log("deleting succeded");
+				// this.$emit('share-change', 0);
 			})
 			.catch((err) => {
 				console.log(err);
