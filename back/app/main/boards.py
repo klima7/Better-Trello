@@ -119,11 +119,13 @@ def share_board(board_id):
         #     return 'Invalid name length', 400
         # board.name = name
 
-        realtime.notify_user(user.id)
-        for u in board.shared_users:
-            realtime.notify_user(u.id)
-        db.session.commit()
-    return {}, 200
+            realtime.notify_user(user.id)
+            for u in board.shared_users:
+                realtime.notify_user(u.id)
+            db.session.commit()
+            return {}, 200
+
+    return "Wrong username", 404
 
 
 @main.route('/boards/<int:board_id>/sharestop', methods=['POST'])
@@ -145,17 +147,13 @@ def stop_sharing_board(board_id):
         user_sharing = User.query.filter_by(email=email).first()
         if user_sharing and user_sharing in board.shared_users:
             board.shared_users.remove(user_sharing)
-            print("deleted user: " + user_sharing.email)
-        else:
-            print("something not right: ", user_sharing, user_sharing in board.shared_users)
 
-        # if len(name) == 0 or len(name) > 30:
-        #     return 'Invalid name length', 400
-        # board.name = name
+            realtime.notify_user(user.id)
+            realtime.notify_user(user_sharing.id)
+            for u in board.shared_users:
+                realtime.notify_user(u.id)
 
-        realtime.notify_user(user.id)
-        realtime.notify_user(user_sharing.id)
-        # for u in board.shared_users:
-        #     realtime.notify_user(u.id)
-        db.session.commit()
-    return {}, 200
+            db.session.commit()
+            return {}, 200
+
+    return "Passed invalid user data", 404

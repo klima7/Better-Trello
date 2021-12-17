@@ -38,12 +38,7 @@
         <v-row>
             <BoardTile v-for="board in shared_boards" :key="board.id" :board="board" />
         </v-row>
-
-        <v-row>
-			<v-col>
-				{{ this.$store.getters.user }}
-			</v-col>
-        </v-row>
+		
 		<ShareDialog 
 			v-model="sharing_dialog_opened"
 			v-on:hide="hideShareDialog"

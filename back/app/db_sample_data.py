@@ -48,6 +48,7 @@ def add_sample_data():
 
     user = User(email='test@test.com', password="testtest", boards=[board1, board2])
     user2 = User(email='zz@top.com', password="zztop", boards=[board3])
+    user3 = User(email='vue@js.com', password="vuejs")
     user2.shared_boards.append(board1)
     user2.shared_boards.append(board2)
     board3.shared_users.append(user)
@@ -55,4 +56,5 @@ def add_sample_data():
     # FINISH
     db.session.add(user)
     db.session.add(user2)
+    db.session.add(user3)
     db.session.commit()

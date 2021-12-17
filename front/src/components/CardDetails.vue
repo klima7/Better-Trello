@@ -5,7 +5,7 @@
 		@click:outside="dialogClosed">
 			<!-- <v-card>
 				<v-card-title> -->
-					<v-container fluid class="white">
+					<v-container fluid class="grey lighten-3">
 						<!-- title -->
 						<v-row class="mb-0"> 
 							<!-- <v-col> -->
@@ -87,7 +87,21 @@
 						</div>
 							</v-col>
 						</v-row>
-				<v-btn @click="dialogClosed">Close</v-btn>
+						<v-row>
+							<v-col>
+								<v-icon style="vertical-align: baseline" class="d-inline-block" color="black">mdi-comment-outline</v-icon>
+								<span class="text-h6 ml-2">Comments</span>
+								<!-- <h3>Aktywność</h3> -->
+							</v-col>
+						</v-row>
+						<v-row>
+							<v-col class="ml-8">
+								<CardComment
+									:card="card"
+								/>
+							</v-col>
+						</v-row>
+						<v-btn @click="dialogClosed">Close</v-btn>
 					</v-container>
 				<!-- </v-card-text> -->
 			<!-- <v-card-text> -->
@@ -97,6 +111,9 @@
 </template>
 
 <script>
+
+import CardComment from "@/components/CardComment.vue";
+
 export default {
 	props: {
 		// detailsVisible: Boolean,
@@ -111,8 +128,11 @@ export default {
 			newTitle: this.card.title,
 
 			descriptionEdit: false,
-			newDescription: ""
+			newDescription: "",
 		}
+	},
+	components: {
+		CardComment	
 	},
 	methods: {
 		dialogClosed: function (event) {

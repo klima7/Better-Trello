@@ -27,6 +27,14 @@
 							<!-- </v-col>
 								</v-row> -->
 					</v-form>
+					<v-alert
+						class="mt-3"
+						v-model="error_visible" 
+						color="red"
+						border="left"
+						dismissible
+						>
+						{{ error_msg }}</v-alert>
 				</v-col>
 				<!-- <v-col>
 					<h1>Udostępnianie tablicy <i>{{board['name']}}</i></h1>
@@ -75,6 +83,8 @@ export default {
 	},
 	data() {
 		return {
+			error_visible: false,
+			error_msg: "",
 			mboard: this.board,
 			sharing_dialog_opened: true,
 			newUser: ""
@@ -92,6 +102,8 @@ export default {
 			})
 			.catch((err) => {
 				console.log(err);
+				this.error_visible = true;
+				this.error_msg = "Błąd podczas dodwania użytkownika. Upewnij się, że wpisany email jest poprawny."
 			});
 		},
 		removeUser: function(u) {
@@ -103,6 +115,8 @@ export default {
 			})
 			.catch((err) => {
 				console.log(err);
+				this.error_visible = true;
+				this.error_msg = "Błąd podczas usuwania użytkownika."
 			});
 		}
 	}
