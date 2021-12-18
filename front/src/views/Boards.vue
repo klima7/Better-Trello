@@ -26,9 +26,23 @@
         </v-row>
 
         <v-row>
-            <BoardTile v-for="board in boards" :key="board.id" :board="board" />
+            <BoardTile v-for="board in owned_boards" :key="board.id" :board="board" v-on:share="openSharing" :sharing="true" />
         </v-row>
 
+		<v-row>
+            <v-col>
+                <h1>Udostępnione tablice innych użytkowników</h1>
+            </v-col>
+        </v-row>
+
+        <v-row>
+            <BoardTile v-for="board in shared_boards" :key="board.id" :board="board" :sharing="false" />
+        </v-row>
+		
+		<ShareDialog 
+			v-model="sharing_dialog_opened"
+			v-on:hide="hideShareDialog"
+			:board="sharing_board"/>
 	</v-container>
 </template>
 
@@ -36,35 +50,55 @@
 
 	const axios = require('axios').default;
 	import BoardTile from "@/components/BoardTile.vue";
+	import ShareDialog from "@/components/ShareDialog.vue";
+	import SocketIO from "socket.io-client";
 
 	export default {
 		data() {
 			return {
+				socket: SocketIO(process.env.VUE_APP_BACKEND_URL+'/usersz/'+ this.$store.getters.user.id, { transports : ['websocket']}),
 				new_board_name: "",
-				boards: [],
+				owned_boards: [],
+				shared_boards: [],
+				sharing_dialog_opened: false,
+				sharing_board: {name: "aa", shared_users: []},
 				rules: [
 					(value) => !!value || "Pole wymagane!",
 					(value) => (value || "").length <= 40 || "Maksymalna długość nazwy tablicy: 40 znaków!",
-				],
+				]
+				// ,
+				// user: 
 			}
 		},
 		components: {
-			BoardTile
+			BoardTile,
+			ShareDialog
 		},
 		methods: {
 			boardSelected(id) {
-				alert("nie wiem czy to będzie potrzebne tutaj: " + id);
 			},
 			fetchBoardList() {
-				axios.get('/boards')
+				this.axios.get('/boards')
 				.then((response) => {
-					console.log(response);
-					this.boards = response.data;
+					console.log(response.data);
+					this.owned_boards = response.data.owned_boards;
+					this.shared_boards = response.data.shared_boards;
+
+					if (this.sharing_dialog_opened) {
+						var sh_board = this.sharing_board;
+						for (let b of this.owned_boards) {
+							if (b.id == sh_board.id) {
+								this.sharing_board = b;
+								break;
+							}
+						}
+					}
 				})
 				// eslint-disable-next-line no-unused-vars
 				.catch((error) =>  {
 					console.log(`Sorry sir no boards here. ${error}`);
-					this.boards = [];
+					this.owned_boards = [];
+					this.shared_boards = [];
 				})
 			},
 			addBoard() {
@@ -83,11 +117,24 @@
 				.catch((error) => {
 					console.log('Error occurred while adding' + this.new_board_name);
 				});	
+			},
+			hideShareDialog() {
+				this.sharing_dialog_opened = false;
+				this.sharing_board = null;
+			},
+			openSharing(board) {
+				console.log("got board");
+				console.log(JSON.stringify(board));
+				this.sharing_board = board;
+				this.sharing_dialog_opened = true;
 			}
 		},
 		created() {
-			console.log("anybody here");
 			this.fetchBoardList();
+			this.socket.on("users-board-changed", (socket) => {
+				console.log("Refreshing boards");
+				this.fetchBoardList();
+			});
 		}
 	}
 </script>

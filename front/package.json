@@ -12,13 +12,13 @@
     "@websanova/vue-auth": "^4.1.6",
     "axios": "^0.24.0",
     "core-js": "^3.6.5",
+    "socket.io-client": "^4.4.0",
     "vue": "^2.6.11",
     "vue-axios": "^3.4.0",
     "vue-router": "^3.2.0",
     "vuedraggable": "^2.24.3",
     "vuetify": "^2.4.0",
-    "vuex": "^3.4.0",
-    "socket.io-client": "^4.4.0"
+    "vuex": "^3.4.0"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.0",
