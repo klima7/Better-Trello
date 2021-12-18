@@ -73,7 +73,8 @@ export default {
     },
 
     showCardDetails: function(e) {
-      this.$emit("show-card-details", e);
+      // e.column = this.column;
+      this.$emit("show-card-details", {card_id: e, column_id: this.column.id});
     },
 
     moveCard(cardId, targetColumn, targetPosition) {

@@ -26,7 +26,7 @@
         </v-row>
 
         <v-row>
-            <BoardTile v-for="board in owned_boards" :key="board.id" :board="board" v-on:share="openSharing" />
+            <BoardTile v-for="board in owned_boards" :key="board.id" :board="board" v-on:share="openSharing" :sharing="true" />
         </v-row>
 
 		<v-row>
@@ -36,7 +36,7 @@
         </v-row>
 
         <v-row>
-            <BoardTile v-for="board in shared_boards" :key="board.id" :board="board" />
+            <BoardTile v-for="board in shared_boards" :key="board.id" :board="board" :sharing="false" />
         </v-row>
 		
 		<ShareDialog 

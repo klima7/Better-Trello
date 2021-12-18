@@ -21,6 +21,7 @@ class User(db.Model):
     boards = db.relationship("Board", backref="user", lazy='select')
 
     shared_boards = db.relationship("Board", secondary='association', back_populates='shared_users')
+    comments = db.relationship("Comment", backref="user", lazy='select')
 
     @property
     def password(self):
@@ -41,10 +42,24 @@ class Card(db.Model):
     description = db.Column(db.String)
     column_id = db.Column(db.Integer, db.ForeignKey('column.id'))
     order = db.Column(db.Integer)
+    comments = db.relationship("Comment", backref="card", lazy="select")
 
     def toJSON(self):
-        return {"id": self.id, "title": self.title, "description": self.description}
+        return {"id": self.id, "title": self.title, "description": self.description, "comments": [
+            c.toJSON() for c in self.comments
+        ]}
 
+class Comment(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    content = db.Column(db.String(4096))
+    # user = db.relationship(User)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    card_id = db.Column(db.Integer, db.ForeignKey('card.id'))
+
+    def toJSON(self):
+        user = User.query.filter_by(id=self.user_id).first()
+        # board_json = Board.query.filter_by(id=board_id).first()
+        return {"id": self.id, "content": self.content, "user": user.email}
 
 class Column(db.Model):
 

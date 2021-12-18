@@ -29,10 +29,11 @@
       </draggable>
     </div>
     <CardDetails
-      v-model="detailsVisible"
+      v-if="selectedCard"
+      v-model="detailsVisible" 
       v-on:visibility-change="hideCardDetails"
-      :card="selectedCard" 
-      :key="selectedCard.id"
+      v-bind:card="board.columns[selectedCard.column_id].cards[selectedCard.card_id]" 
+      :key="board.columns[selectedCard.column_id].cards[selectedCard.card_id].id"
       />
   </div>
 </template>
@@ -48,7 +49,7 @@ export default {
   data() {
     return {
       detailsVisible: false,
-      selectedCard: {id: -1, title: "Title", description: "description"}
+      selectedCard: null//{id: -1, title: "Title", description: "description"}
     }
   },
   props: {
@@ -72,7 +73,16 @@ export default {
     },
     
     showCardDetails: function(event) {
-      this.selectedCard = event;
+      for (var i = 0; i < this.board.columns.length; i++) {
+        if (this.board.columns[i].id == event.column_id) {
+          for (var j = 0; j < this.board.columns[i].cards.length; j++) {
+            if (this.board.columns[i].cards[j].id == event.card_id) {
+              this.selectedCard = {column_id: i, card_id: j};//this.board.columns[i].cards[j];
+            }
+          }
+        }
+      }
+      console.log("selecting " + JSON.stringify(event));
       this.detailsVisible = true;
     },
 

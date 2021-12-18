@@ -12,7 +12,7 @@ export default {
   },
   methods: {
     showDetails: function(event) {
-      this.$emit('show-card-details', this.card);
+      this.$emit('show-card-details', this.card.id);
     }
   }
 };

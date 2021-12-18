@@ -10,7 +10,7 @@
           </v-row>
           <v-row>
             <v-col align="right">
-              <v-btn small @click.prevent="share">udostępnij</v-btn>
+              <v-btn v-if="sharing" small @click.prevent="share">udostępnij</v-btn>
             </v-col>
           </v-row>
         </v-container>
@@ -22,7 +22,8 @@
 <script>
 export default {
   props: {
-    board: Object
+    board: Object,
+    sharing: Boolean
   },
   methods: {
     share() {

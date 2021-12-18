@@ -31,6 +31,7 @@ export default {
         .post("/info", data)
         .then((response) => {
           this.board = response.data;
+          this.board.time = (new Date()).getTime();
         })
         .catch((error) => {
           console.log(
@@ -56,6 +57,9 @@ export default {
       this.fetchBoardInfo();
     });
   },
+  updated() {
+    console.log("UPDATE coming through");
+  }
 };
 </script>
 

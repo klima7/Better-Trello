@@ -90,6 +90,103 @@ def card_patch(card_id):
     return {}, 200
 
 
+@main.route('/cards/<int:card_id>/comment', methods=['POST'])
+@auth.login_required
+def add_comment(card_id):
+    card = Card.query.filter_by(id=card_id).first()
+    if card is None:
+        return 'Card not found', 404
+
+    column = Column.query.filter_by(id=card.column_id).first()
+    if column is None:
+        return 'Column for card not found', 404
+
+    board = Board.query.filter_by(id=column.board_id).first()
+    if board is None:
+        return 'Board for column not found', 404
+
+    user = auth.current_user()
+    if not board.userHasAccess(user.id): #board.user_id != user.id:
+        return 'User is not owner of this board', 403
+
+    if request.json is None:
+        return {}, 200
+
+    if 'content' in request.json:
+        comment = Comment(user_id=user.id, card_id=card.id, content=request.json['content'])
+        card.comments.append(comment)
+        print("notifying board")
+        realtime.notify_board_changed(board.id)
+        db.session.commit()
+        return {}, 200
+
+    return "No content in comment", 400
+
+@main.route('/cards/<int:card_id>/comment/<int:comment_id>', methods=['PATCH'])
+@auth.login_required
+def edit_comment(card_id, comment_id):
+    card = Card.query.filter_by(id=card_id).first()
+    if card is None:
+        return 'Card not found', 404
+
+    column = Column.query.filter_by(id=card.column_id).first()
+    if column is None:
+        return 'Column for card not found', 404
+
+    board = Board.query.filter_by(id=column.board_id).first()
+    if board is None:
+        return 'Board for column not found', 404
+
+    user = auth.current_user()
+    if not board.userHasAccess(user.id): #board.user_id != user.id:
+        return 'User is not owner of this board', 403
+
+    if request.json is None:
+        return {}, 200
+
+    comment = Comment.query.filter_by(id=comment_id, user_id=user.id, card_id=card.id).first()
+
+    if comment is None:
+        return 'Comment not found', 404
+
+    if 'content' in request.json:
+        comment.content = request.json['content']
+        realtime.notify_board_changed(board.id)
+        db.session.commit()
+        return {}, 200
+
+    return "No content in comment", 400
+
+@main.route('/cards/<int:card_id>/comment/<int:comment_id>', methods=['DELETE'])
+@auth.login_required
+def delete_comment(card_id, comment_id):
+    card = Card.query.filter_by(id=card_id).first()
+    if card is None:
+        return 'Card not found', 404
+
+    column = Column.query.filter_by(id=card.column_id).first()
+    if column is None:
+        return 'Column for card not found', 404
+
+    board = Board.query.filter_by(id=column.board_id).first()
+    if board is None:
+        return 'Board for column not found', 404
+
+    user = auth.current_user()
+    if not board.userHasAccess(user.id): #board.user_id != user.id:
+        return 'User is not owner of this board', 403
+
+    comment = Comment.query.filter_by(id=comment_id, user_id=user.id, card_id=card.id).first()
+
+    if comment is None:
+        return 'Comment not found', 404
+
+    card.comments.remove(comment)
+    realtime.notify_board_changed(board.id)
+    db.session.commit()
+    return {}, 200
+
+
 def _change_card_order(card, new_order):
     old_order = card.order
     if old_order == new_order:

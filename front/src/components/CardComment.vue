@@ -4,45 +4,22 @@
 			<v-container>
 				<v-row>
 					<!-- <v-col class="py-0"> -->
-					<v-text-field
+					<v-textarea
 						label="Add comment"
-						v-model="comment_input">
-						</v-text-field>
-					<v-btn>Submit</v-btn>
-							<!-- <v-btn> aha!</v-btn> -->
-					<!-- </v-col>
-					<v-col md="auto" class="py-0"> -->
-					<!-- </v-col> -->
+						v-model="comment_input"
+						class="mr-2"
+						rows="2"
+						solo 
+						hide-details
+						outlined
+						>
+						</v-textarea>
+					<v-btn @click="addComment">Submit</v-btn>
 				</v-row>
 				<v-row>
-					<v-col>
+					<v-col class="px-0">
 						<v-container>
-							<Comment v-for="comment in comments" :key="comment.user" :comment="comment" :userowned="true" />
-							<!-- <v-row v-for="comment in comments" :key="comment.user">
-								<v-col md="auto">
-									<v-avatar
-										color="primary"
-										size="40">
-									<span class="white--text text-h6">{{ comment.user.substring(0, 2) }}</span>
-									</v-avatar>
-								</v-col>
-								<v-col>
-									<v-row>
-										<h4>{{comment.user}}</h4>
-									</v-row>
-									<v-row>
-										<span v-if="!comment_edit">{{comment.content}}</span>
-									</v-row>
-									<v-row v-if="!comment_edit && email != comment.user">
-										<v-btn text small color="primary" @click="edit()">Edit</v-btn>
-										<v-btn text small color="primary">Delete</v-btn>
-									</v-row>
-									/// <v-list-item-content>
-										<v-list-item-title v-text="comment.user"></v-list-item-title>
-										<v-list-item-subtitle v-text="comment.content"></v-list-item-subtitle>
-									</v-list-item-content> ///
-								</v-col>
-							</v-row>-->
+							<Comment v-for="comment in this.card.comments" :key="comment.id" :comment="comment" :card="card" :userowned="comment.user == user.email" />
 						</v-container>
 					</v-col>
 				</v-row> 
@@ -64,13 +41,26 @@ export default {
 	},
 	data() {
 		return {
-			comments: [
-				{user: "aba", content: "kici kici"},
-				{user: "bab", content: "ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci "}],
+			// comments: this.card.comments,
+			// [
+			// 	{user: "aba", content: "kici kici"},
+			// 	{user: "bab", content: "ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci "}],
 			comment_input: "",
 			comment_edit_value: "",
 			comment_edit: false,
 			user: this.$store.getters.user
+		}
+	},
+	methods: {
+		addComment: function() {
+			this.axios.post(`/cards/${this.card.id}/comment`, {content: this.comment_input})
+				.then((response) => {
+					console.log('Added comment: ' + this.comment_input);
+					this.comment_input = "";
+				})
+				.catch((error) => {
+					console.log('Error occurred while adding comment');
+				});	
 		}
 	}
 };
