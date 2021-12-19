@@ -168,7 +168,7 @@ export default {
 
     archiveAddClicked: function () {
       this.axios
-        .post("/cards/" + this.card.id + "/archive", {})
+        .post("/cards/" + this.card.id + "/archive", {state: true})
         .then((res) => {
           this.$emit("card-archive-change");
           this.dialogClosed();

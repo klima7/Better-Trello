@@ -1,7 +1,10 @@
 <template>
   <div class="px-6">
-    <div>
+    <div class="d-flex justify-start">
       <BoardName :board="board" />
+      <v-btn icon @click="toggleArchived()">
+        <v-icon color="black">mdi-archive</v-icon>
+      </v-btn>
     </div>
     <div class="d-flex flex-row">
       <draggable
@@ -32,10 +35,16 @@
       v-if="selectedCard"
       v-model="detailsVisible" 
       v-on:visibility-change="hideCardDetails"
-      v-on:card-archive-change="hideCard"
+      v-on:card-archive-change="hideCard(board.columns[selectedCard.column_id].cards[selectedCard.card_id])"
       v-bind:card="board.columns[selectedCard.column_id].cards[selectedCard.card_id]" 
       :key="board.columns[selectedCard.column_id].cards[selectedCard.card_id].id"
       />
+    <v-navigation-drawer v-model="drawer" app right>
+      <ArchivedCards
+        :columns="board.columns"
+        v-on:card-archive-change="showCard"
+      />
+    </v-navigation-drawer>
   </div>
 </template>
 
@@ -45,10 +54,12 @@ import Column from "@/components/Column.vue";
 import ColumnAdd from "@/components/ColumnAdd.vue";
 import CardDetails from "@/components/CardDetails.vue";
 import draggable from "vuedraggable";
+import ArchivedCards from "@/components/ArchivedCards.vue";
 
 export default {
   data() {
     return {
+      drawer: false,
       detailsVisible: false,
       selectedCard: null//{id: -1, title: "Title", description: "description"}
     }
@@ -63,6 +74,7 @@ export default {
     ColumnAdd,
     CardDetails,
     draggable,
+    ArchivedCards,
   },
 
   methods: {
@@ -91,16 +103,30 @@ export default {
       this.detailsVisible = event;
     },
 
-    hideCard: function(event) {
+    hideCard: function(card) {
       console.log("card archived: " + JSON.stringify(this.selectedCard));
+      this.board.columns[this.selectedCard.column_id].archived_cards.push(card);
       this.board.columns[this.selectedCard.column_id].cards.splice(this.selectedCard.card_id, 1);
       this.selectedCard = null;
-      this.detailsVisible = false;
+      this.detailsVisible = false;      
+    },
+
+    showCard: function(card, column_id) {
+      for (var i = 0; i < this.board.columns.length; i++) {
+        if (this.board.columns[i].id == column_id) {
+          this.board.columns[i].cards.push(card);
+        }
+      }
+      console.log("brought back card from archive");
     },
 
     moveColumn(columnId, targetPosition) {
       this.axios
         .patch(`/columns/${columnId}`, {order: targetPosition})
+    },
+
+    toggleArchived() {
+      this.drawer = !this.drawer;
     }
   }
 
