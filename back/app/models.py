@@ -43,6 +43,7 @@ class Card(db.Model):
     column_id = db.Column(db.Integer, db.ForeignKey('column.id'))
     order = db.Column(db.Integer)
     comments = db.relationship("Comment", backref="card", lazy="select")
+    archived = db.Column(db.Boolean, default=False)
 
     def toJSON(self):
         return {"id": self.id, "title": self.title, "description": self.description, "comments": [
