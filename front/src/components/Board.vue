@@ -32,6 +32,7 @@
       v-if="selectedCard"
       v-model="detailsVisible" 
       v-on:visibility-change="hideCardDetails"
+      v-on:card-archive-change="hideCard"
       v-bind:card="board.columns[selectedCard.column_id].cards[selectedCard.card_id]" 
       :key="board.columns[selectedCard.column_id].cards[selectedCard.card_id].id"
       />
@@ -88,6 +89,13 @@ export default {
 
     hideCardDetails: function(event) {
       this.detailsVisible = event;
+    },
+
+    hideCard: function(event) {
+      console.log("card archived: " + JSON.stringify(this.selectedCard));
+      this.board.columns[this.selectedCard.column_id].cards.splice(this.selectedCard.card_id, 1);
+      this.selectedCard = null;
+      this.detailsVisible = false;
     },
 
     moveColumn(columnId, targetPosition) {
