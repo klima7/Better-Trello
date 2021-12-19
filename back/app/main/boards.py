@@ -68,7 +68,8 @@ def get_board_info():
         cards = Card.query.filter_by(column_id=column.id).order_by(Card.order.asc()).all()
         all_cards = []
         for card in cards:
-            all_cards.append(card.toJSON())
+            if card.archived is False:
+                all_cards.append(card.toJSON())
         columns_dict.append({'name': column.name, 'id': column.id, 'board_id': board_id, 'cards': all_cards})
     if columns_dict is None:
         return {}, 200
