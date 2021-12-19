@@ -187,6 +187,32 @@ def delete_comment(card_id, comment_id):
     return {}, 200
 
 
+@main.route('/cards/<int:card_id>/archive', methods=['POST'])
+@auth.login_required
+def archive_card(card_id):
+    card = Card.query.filter_by(id=card_id).first()
+    if card is None:
+        return 'Card not found', 404
+
+    column = Column.query.filter_by(id=card.column_id).first()
+    if column is None:
+        return 'Column for card not found', 404
+
+    board = Board.query.filter_by(id=column.board_id).first()
+    if board is None:
+        return 'Board for column not found', 404
+
+    user = auth.current_user()
+    if not board.userHasAccess(user.id):
+        return 'User is not owner of this board', 403
+    
+    # Archive card
+    card.archived = True
+    realtime.notify_board_changed(board.id)
+    db.session.commit()
+    return {}, 200
+
+
 def _change_card_order(card, new_order):
     old_order = card.order
     if old_order == new_order:
