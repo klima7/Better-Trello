@@ -44,6 +44,7 @@ class Card(db.Model):
     order = db.Column(db.Integer)
     comments = db.relationship("Comment", backref="card", lazy="select")
     archived = db.Column(db.Boolean, default=False)
+    labels = db.Column(db.PickleType, default=[])   # Python list of labels
 
     def toJSON(self):
         return {"id": self.id, "title": self.title, "description": self.description, "comments": [
@@ -87,7 +88,7 @@ class Board(db.Model):
     name = db.Column(db.String(40))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     columns = db.relationship("Column", backref="board", lazy='select')
-
+    labels = db.relationship("Label", backref="board", lazy='select')
     shared_users = db.relationship("User", secondary='association', back_populates='shared_boards')
 
     def toJSON(self):
@@ -98,3 +99,14 @@ class Board(db.Model):
             return True
         b = Board.query.filter_by(id=self.id).filter(Board.shared_users.any(User.id == user_id)).first()
         return b != None
+
+class Label(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    board_id = db.Column(db.Integer, db.ForeignKey('board.id'))
+    text = db.Column(db.String(20))
+    red = db.Column(db.Integer)
+    green = db.Column(db.Integer)
+    blue = db.Column(db.Integer)
+
+    def toJSON(self):
+        return {"id": self.id, "text": self.text, "red": self.red, "green": self.green, "blue": self.blue}
