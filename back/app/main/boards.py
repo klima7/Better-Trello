@@ -76,7 +76,14 @@ def get_board_info():
         columns_dict.append({'name': column.name, 'id': column.id, 'board_id': board_id, 'cards': all_cards, 'archived_cards': archived_cards})
     if columns_dict is None:
         return {}, 200
-    output_dict = {'id': board_id, 'board_name': board_json['name'], 'columns': columns_dict}
+
+    labels = Label.query.filter_by(board_id=board_id).order_by(Label.creation_time.asc()).all()
+    labels_dict = [label.toJSON() for label in labels]
+
+    output_dict = {'id': board_id, 'board_name': board_json['name'], 'columns': columns_dict, 'labels': labels_dict}
+    print('labels', output_dict)
+
+
     return jsonify(output_dict), 200
 
 
@@ -175,36 +182,14 @@ def add_label(board_id):
     if not board.userHasAccess(user.id):
         return 'User is not owner of this board', 403
 
-    if not (request.json and 'text' in request.json and 'red' in request.json
-            and 'green' in request.json and 'blue' in request.json):
+    if not (request.json and 'text' in request.json and 'color' in request.json):
         return 'Missing data', 400
 
     text = request.json['text']
-    red = request.json['red']
-    green = request.json['green']
-    blue = request.json['blue']
+    color = request.json['color']
 
-    if not (0 <= red <= 255 and 0 <= green <= 255 and 0 <= blue <= 255):
-        return 'Invalid color component value', 400
-
-    label = Label(board_id=board_id, text=text, red=red, green=green, blue=blue)
+    label = Label(board_id=board_id, text=text, color=color)
     db.session.add(label)
     db.session.commit()
 
     return {}, 200
-
-
-@main.route('/boards/<int:board_id>/labels', methods=['GET'])
-@auth.login_required
-def get_labels(board_id):
-    user = auth.current_user()
-
-    board = Board.query.filter_by(id=board_id).first()
-    if board is None:
-        return 'Board not found', 404
-
-    if not board.userHasAccess(user.id):
-        return 'User is not owner of this board', 403
-
-    labels = Label.query.filter_by(board_id=board_id).order_by(Column.creation_time.asc()).all()
-    return jsonify(labels), 200

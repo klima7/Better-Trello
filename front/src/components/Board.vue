@@ -36,9 +36,14 @@
       v-model="detailsVisible" 
       v-on:visibility-change="hideCardDetails"
       v-on:card-archive-change="hideCard(board.columns[selectedCard.column_id].cards[selectedCard.card_id])"
+      v-on:show-labels-dialog="showLabelsDialog"
       v-bind:card="board.columns[selectedCard.column_id].cards[selectedCard.card_id]" 
       :key="board.columns[selectedCard.column_id].cards[selectedCard.card_id].id"
       />
+    <BoardLabelsDialog
+      v-model="labelsDialogVisible" 
+      v-on:visibility-change="hideLabelsDialog"
+    />
     <v-navigation-drawer v-model="drawer" app right>
       <ArchivedCards
         :columns="board.columns"
@@ -55,13 +60,15 @@ import ColumnAdd from "@/components/ColumnAdd.vue";
 import CardDetails from "@/components/CardDetails.vue";
 import draggable from "vuedraggable";
 import ArchivedCards from "@/components/ArchivedCards.vue";
+import BoardLabelsDialog from "./BoardLabelsDialog.vue";
 
 export default {
   data() {
     return {
       drawer: false,
       detailsVisible: false,
-      selectedCard: null//{id: -1, title: "Title", description: "description"}
+      selectedCard: null,//{id: -1, title: "Title", description: "description"}
+      labelsDialogVisible: false,
     }
   },
   props: {
@@ -75,7 +82,8 @@ export default {
     CardDetails,
     draggable,
     ArchivedCards,
-  },
+    BoardLabelsDialog,
+},
 
   methods: {
     onColumnDrop: function(event) {
@@ -127,7 +135,16 @@ export default {
 
     toggleArchived() {
       this.drawer = !this.drawer;
+    },
+
+    showLabelsDialog() {
+      this.labelsDialogVisible = true;
+    },
+
+    hideLabelsDialog(event) {
+      this.labelsDialogVisible = event;
     }
+
   }
 
 };

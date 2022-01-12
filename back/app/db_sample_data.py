@@ -10,7 +10,7 @@ def add_sample_data():
     Board.query.delete()
 
     # GROCERY LIST TEST BOARD
-    card1 = Card(order=0, title='Herbs & Spices', description='Basil, Oregano, Coriander, Cumin')
+    card1 = Card(order=0, title='Herbs & Spices', description='Basil, Oregano, Coriander, Cumin', labels=[1, 1, 1, 1, 1, 1])
     card2 = Card(order=0, title='Breakfast cereal', description='Porridge oats, Unsweetened gransola')
     card3 = Card(order=1, title='Oily fish', description='Tuna, Salmon, Mackerel')
     card4 = Card(order=0, title='Pulses', description='Red kidney beans, White beans, Green lentils')
@@ -20,6 +20,8 @@ def add_sample_data():
     col3 = Column(order=2, name='Bought', cards=[card4])
 
     board1 = Board(name='Standard Grocery List', columns=[col1, col2, col3])
+
+    label1 = Label(board=board1, text='Important', color='blue')
 
 
     # WORKOUT ROUTINE TEST BOARD

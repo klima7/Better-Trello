@@ -1,6 +1,32 @@
 <template>
   <v-dialog max-width="1000px" v-model="value" @click:outside="dialogClosed">
     <v-container fluid class="grey lighten-3">
+    <v-card-text v-if="card.labels.length != 0">
+        <v-row>
+      <Label
+        v-for="label in card.labels"
+        :key="label.id"
+        :label="label"
+        :card="card"
+        :closeable="true"
+        />
+
+      <!-- Add button -->
+      <v-chip
+        color="black"
+        label
+        text-color="white"
+        v-on:click="showLabelsDialog"
+      >
+        <v-icon left>
+          mdi-plus
+        </v-icon>
+        Add tag
+      </v-chip>
+
+    </v-row>
+    </v-card-text>
+
       <!-- title -->
       <v-row class="mb-0">
         <v-col v-if="!titleEdit" class="d-flex pb-2">
@@ -38,6 +64,22 @@
           </v-form>
         </v-col>
       </v-row>
+
+      <!-- Labels -->
+      <!-- <v-row>
+        <v-col class="py-0">
+      <v-row>
+      <Label
+        v-for="label in card.labels"
+        :key="label.id"
+        :label="label"
+        :closeable="false"
+        />
+        </v-row>
+          <v-btn depressed>Add label</v-btn>
+        </v-col>
+      </v-row> -->
+
       <v-row>
         <v-col class="py-0">
           <v-icon
@@ -104,6 +146,7 @@
 
 <script>
 import CardComment from "@/components/CardComment.vue";
+import Label from "./Label.vue";
 
 export default {
   props: {
@@ -124,6 +167,7 @@ export default {
   },
   components: {
     CardComment,
+    Label,
   },
   methods: {
     dialogClosed: function (event) {
@@ -180,6 +224,11 @@ export default {
     descriptionEditRejected: function () {
       this.descriptionEdit = false;
     },
+
+    showLabelsDialog: function() {
+      console.log("Showting labels dialog")
+      this.$emit('show-labels-dialog', this.card.id);
+    }
   },
 };
 </script>

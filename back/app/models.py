@@ -43,9 +43,14 @@ class Card(db.Model):
     labels = db.Column(db.PickleType, default=[])   # Python list of labels
 
     def toJSON(self):
-        return {"id": self.id, "title": self.title, "description": self.description, "comments": [
-            c.toJSON() for c in self.comments
-        ]}
+        labels_full = []
+        for label in self.labels:
+            label_full = Label.query.filter_by(id=label).first()
+            if label_full:
+                labels_full.append(label_full.toJSON())
+
+        return {"id": self.id, "title": self.title, "description": self.description,
+                "comments": [c.toJSON() for c in self.comments], "labels": labels_full}
 
 class Comment(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -101,9 +106,7 @@ class Label(db.Model):
     board_id = db.Column(db.Integer, db.ForeignKey('board.id'))
     creation_time = db.Column(db.DateTime, default=datetime.utcnow)
     text = db.Column(db.String(20))
-    red = db.Column(db.Integer)
-    green = db.Column(db.Integer)
-    blue = db.Column(db.Integer)
+    color = db.Column(db.String(20))
 
     def toJSON(self):
-        return {"id": self.id, "text": self.text, "red": self.red, "green": self.green, "blue": self.blue}
+        return {"id": self.id, "text": self.text, "color": self.color}
