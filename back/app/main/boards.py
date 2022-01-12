@@ -181,7 +181,7 @@ def add_label(board_id):
 
     if not board.userHasAccess(user.id):
         return 'User is not owner of this board', 403
-
+    print(request.json)
     if not (request.json and 'text' in request.json and 'color' in request.json):
         return 'Missing data', 400
 
@@ -191,5 +191,7 @@ def add_label(board_id):
     label = Label(board_id=board_id, text=text, color=color)
     db.session.add(label)
     db.session.commit()
+
+    realtime.notify_board_changed(board_id)
 
     return {}, 200

@@ -9,7 +9,7 @@
       class="mb-1 mr-1"
       label
     >
-      Remove
+      {{label.text}}
     </v-chip>
 
     <v-chip
@@ -21,7 +21,7 @@
       class="mb-1 mr-1"
       label
     >
-      Remove
+      {{label.text}}
     </v-chip>
 
   </div>

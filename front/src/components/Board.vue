@@ -33,7 +33,8 @@
     </div>
     <CardDetails
       v-if="selectedCard"
-      v-model="detailsVisible" 
+      v-model="detailsVisible"
+      :board="board"
       v-on:visibility-change="hideCardDetails"
       v-on:card-archive-change="hideCard(board.columns[selectedCard.column_id].cards[selectedCard.card_id])"
       v-on:show-labels-dialog="showLabelsDialog"
@@ -42,6 +43,7 @@
       />
     <BoardLabelsDialog
       v-model="labelsDialogVisible" 
+      :board="board"
       v-on:visibility-change="hideLabelsDialog"
     />
     <v-navigation-drawer v-model="drawer" app right>

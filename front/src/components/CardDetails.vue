@@ -21,7 +21,7 @@
         <v-icon left>
           mdi-plus
         </v-icon>
-        Add tag
+        Add label
       </v-chip>
 
     </v-row>
@@ -152,6 +152,7 @@ export default {
   props: {
     value: Boolean,
     card: Object,
+    board: Object,
   },
   data() {
     // temporary
