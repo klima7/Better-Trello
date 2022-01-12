@@ -24,8 +24,6 @@
 									<v-btn class="ml-2" @click="addUser">
 										Dodaj użytkownika
 									</v-btn>
-							<!-- </v-col>
-								</v-row> -->
 					</v-form>
 					<v-alert
 						class="mt-3"
@@ -36,9 +34,6 @@
 						>
 						{{ error_msg }}</v-alert>
 				</v-col>
-				<!-- <v-col>
-					<h1>Udostępnianie tablicy <i>{{board['name']}}</i></h1>
-				</v-col> -->
 			</v-row>
 			<v-row>
 				<v-col class="pb-0">
@@ -98,7 +93,6 @@ export default {
 			this.axios.post(`/boards/${this.board.id}/share`, {email: this.newUser})
 			.then((res) => {
 				console.log("Sharing succeded");
-				// this.$emit('share-change', 0);
 			})
 			.catch((err) => {
 				console.log(err);
@@ -111,7 +105,6 @@ export default {
 			this.axios.post(`/boards/${this.board.id}/sharestop`, {email: u})
 			.then((res) => {
 				console.log("deleting succeded");
-				// this.$emit('share-change', 0);
 			})
 			.catch((err) => {
 				console.log(err);

@@ -1,17 +1,12 @@
 <template>
   <v-dialog max-width="1000px" v-model="value" @click:outside="dialogClosed">
-    <!-- <v-card>
-				<v-card-title> -->
     <v-container fluid class="grey lighten-3">
       <!-- title -->
       <v-row class="mb-0">
-        <!-- <v-col> -->
         <v-col v-if="!titleEdit" class="d-flex pb-2">
           <v-icon style="vertical-align: baseline" color="black"
             >mdi-card-text-outline</v-icon
           >
-          <!-- </v-col> -->
-          <!-- <div > -->
           <span class="ml-2 text-h6">{{ card.title }}</span>
           <v-btn icon class="ml-0" @click="titleEditClicked()">
             <v-icon color="black">mdi-pencil</v-icon>
@@ -20,15 +15,12 @@
           <v-btn icon class="ml-0" @click="archiveAddClicked()">
             <v-icon color="black">mdi-archive-plus</v-icon>
           </v-btn>
-          <!-- </div> -->
         </v-col>
         <v-col v-else class="d-flex">
           <v-icon style="vertical-align: baseline" color="black"
             >mdi-card-text-outline</v-icon
           >
           <v-form class="mb-3 ml-2 d-flex">
-            <!-- <v-row>
-									<v-col> -->
             <v-text-field
               dense
               hide-details
@@ -43,23 +35,11 @@
             <v-btn icon @click="titleEditRejected">
               <v-icon color="black">mdi-close</v-icon>
             </v-btn>
-            <!-- </v-col>
-											</v-row> -->
           </v-form>
         </v-col>
       </v-row>
-      <!-- <v-row class="my-0 ml-5">
-							<v-col class="py-0 subtitle-1 light-gray">
-								on column <a href="http://www.google.com">{{ card.column.name }}</a>
-							</v-col>
-						</v-row> -->
-      <!-- </v-card-title> -->
-      <!-- <v-card-subtitle class="ml-8"> -->
-      <!-- </v-card-subtitle> -->
-      <!-- <v-card-text> -->
       <v-row>
         <v-col class="py-0">
-          <!-- <v-row> -->
           <v-icon
             style="vertical-align: top"
             class="d-inline-block"
@@ -74,14 +54,11 @@
             @click="descriptionEditClicked()"
           >
             Edit
-            <!-- <v-icon color="black">mdi-pencil</v-icon> -->
           </v-btn>
-          <!-- </v-row> -->
         </v-col>
       </v-row>
       <v-row class="mb-0">
         <v-col class="pt-0 my-2 ml-6">
-          <!-- class="d-inline-block"  -->
           <div id="desc_edit" class="ml-2 mr-8">
             <div v-if="!descriptionEdit" style="white-space: pre">
               {{ card.description }}
@@ -113,7 +90,6 @@
             >mdi-comment-outline</v-icon
           >
           <span class="text-h6 ml-2">Comments</span>
-          <!-- <h3>Aktywność</h3> -->
         </v-col>
       </v-row>
       <v-row>
@@ -123,10 +99,6 @@
       </v-row>
       <v-btn @click="dialogClosed">Close</v-btn>
     </v-container>
-    <!-- </v-card-text> -->
-    <!-- <v-card-text> -->
-    <!-- </v-card-text>
-			</v-card> -->
   </v-dialog>
 </template>
 
@@ -135,7 +107,6 @@ import CardComment from "@/components/CardComment.vue";
 
 export default {
   props: {
-    // detailsVisible: Boolean,
     value: Boolean,
     card: Object,
   },

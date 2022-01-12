@@ -3,7 +3,6 @@
 		<v-form>
 			<v-container>
 				<v-row>
-					<!-- <v-col class="py-0"> -->
 					<v-textarea
 						label="Add comment"
 						v-model="comment_input"
@@ -41,10 +40,6 @@ export default {
 	},
 	data() {
 		return {
-			// comments: this.card.comments,
-			// [
-			// 	{user: "aba", content: "kici kici"},
-			// 	{user: "bab", content: "ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci ci "}],
 			comment_input: "",
 			comment_edit_value: "",
 			comment_edit: false,
