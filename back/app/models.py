@@ -1,12 +1,8 @@
 from app import db
 from werkzeug.security import generate_password_hash, check_password_hash
 from sqlalchemy.ext.declarative import declarative_base
+from datetime import datetime
 Base = declarative_base()
-
-# association_table = db.Table('association',
-#     db.Column('user', db.ForeignKey('User.id'), primary_key=True),
-#     db.Column('board', db.ForeignKey('Board.id'), primary_key=True)
-# )
 
 class Association(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -103,6 +99,7 @@ class Board(db.Model):
 class Label(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     board_id = db.Column(db.Integer, db.ForeignKey('board.id'))
+    creation_time = db.Column(db.DateTime, default=datetime.utcnow)
     text = db.Column(db.String(20))
     red = db.Column(db.Integer)
     green = db.Column(db.Integer)

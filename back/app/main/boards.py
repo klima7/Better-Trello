@@ -161,3 +161,50 @@ def stop_sharing_board(board_id):
             return {}, 200
 
     return "Passed invalid user data", 404
+
+
+@main.route('/boards/<int:board_id>/labels', methods=['POST'])
+@auth.login_required
+def add_label(board_id):
+    user = auth.current_user()
+
+    board = Board.query.filter_by(id=board_id).first()
+    if board is None:
+        return 'Board not found', 404
+
+    if not board.userHasAccess(user.id):
+        return 'User is not owner of this board', 403
+
+    if not (request.json and 'text' in request.json and 'red' in request.json
+            and 'green' in request.json and 'blue' in request.json):
+        return 'Missing data', 400
+
+    text = request.json['text']
+    red = request.json['red']
+    green = request.json['green']
+    blue = request.json['blue']
+
+    if not (0 <= red <= 255 and 0 <= green <= 255 and 0 <= blue <= 255):
+        return 'Invalid color component value', 400
+
+    label = Label(board_id=board_id, text=text, red=red, green=green, blue=blue)
+    db.session.add(label)
+    db.session.commit()
+
+    return {}, 200
+
+
+@main.route('/boards/<int:board_id>/labels', methods=['GET'])
+@auth.login_required
+def get_labels(board_id):
+    user = auth.current_user()
+
+    board = Board.query.filter_by(id=board_id).first()
+    if board is None:
+        return 'Board not found', 404
+
+    if not board.userHasAccess(user.id):
+        return 'User is not owner of this board', 403
+
+    labels = Label.query.filter_by(board_id=board_id).order_by(Column.creation_time.asc()).all()
+    return jsonify(labels), 200
