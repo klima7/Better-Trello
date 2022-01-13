@@ -6,6 +6,7 @@
       :color="label.color"
       text-color="white"
       @click:close="delete_clicked"
+      @click="select"
       class="mb-1 mr-1"
       label
     >
@@ -26,6 +27,9 @@ export default {
       this.axios
             .delete(`/boards/${this.board.id}/labels/${this.label.id}`)
     },
+    select() {
+      this.$emit("select");
+    }
   }
 };
 </script>

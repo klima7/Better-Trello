@@ -44,6 +44,7 @@
     <BoardLabelsDialog
       v-model="labelsDialogVisible" 
       :board="board"
+      :cardId="labelsDialogCardId"
       v-on:visibility-change="hideLabelsDialog"
     />
     <v-navigation-drawer v-model="drawer" app right>
@@ -71,6 +72,7 @@ export default {
       detailsVisible: false,
       selectedCard: null,//{id: -1, title: "Title", description: "description"}
       labelsDialogVisible: false,
+      labelsDialogCardId: 0,
     }
   },
   props: {
@@ -139,7 +141,8 @@ export default {
       this.drawer = !this.drawer;
     },
 
-    showLabelsDialog() {
+    showLabelsDialog(cardId) {
+      this.labelsDialogCardId = cardId
       this.labelsDialogVisible = true;
     },
 

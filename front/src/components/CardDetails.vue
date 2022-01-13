@@ -1,7 +1,7 @@
 <template>
   <v-dialog max-width="1000px" v-model="value" @click:outside="dialogClosed">
     <v-container fluid class="grey lighten-3">
-    <v-card-text v-if="card.labels.length != 0">
+    <v-card-text>
         <v-row>
       <Label
         v-for="label in card.labels"
@@ -12,17 +12,16 @@
         />
 
       <!-- Add button -->
-      <v-chip
+      <v-btn
         color="black"
-        label
-        text-color="white"
+        text
         v-on:click="showLabelsDialog"
       >
         <v-icon left>
           mdi-plus
         </v-icon>
         Add label
-      </v-chip>
+      </v-btn>
 
     </v-row>
     </v-card-text>

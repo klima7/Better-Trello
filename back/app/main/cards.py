@@ -287,3 +287,38 @@ def _delete_card_from_column(card_to_remove):
 def _add_card_to_column(card, column):
     card.order = column.next_card_order
     column.cards.append(card)
+
+
+@main.route('/cards/<int:card_id>/labels', methods=['POST'])
+@auth.login_required
+def add_card_label(card_id):
+    card = Card.query.filter_by(id=card_id).first()
+    if card is None:
+        return 'Card not found', 404
+
+    column = Column.query.filter_by(id=card.column_id).first()
+    if column is None:
+        return 'Column for card not found', 404
+
+    board = Board.query.filter_by(id=column.board_id).first()
+    if board is None:
+        return 'Board for column not found', 404
+
+    user = auth.current_user()
+    if not board.userHasAccess(user.id):
+        return 'User is not owner of this board', 403
+
+    if request.json and 'labelId' in request.json:
+        label_id = request.json['labelId']
+
+        if label_id in card.labels:
+            return 'Label already added', 400
+
+        card.labels = card.labels + [label_id]
+        db.session.add(card)
+        db.session.commit()
+
+        realtime.notify_board_changed(board.id)
+        return {}, 200
+
+    return "Invalid data provided", 400

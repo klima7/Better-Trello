@@ -1,5 +1,5 @@
 <template>
-  <v-dialog max-width="600px" v-model="value" @click:outside="closeDialog">
+  <v-dialog max-width="600px" v-model="value" @click:outside="closeDialog()">
     <v-container fluid class="grey lighten-3">
       <h1 class="mb-3">Board labels</h1>
       <h2>Add new</h2>
@@ -51,6 +51,7 @@
           :key="label.id"
           :label="label"
           :board="board"
+          @select="labelSelected(label)"
           />
       </v-row>
 
@@ -64,7 +65,8 @@ import BoardLabel from "./BoardLabel.vue";
 export default {
   props: {
     value: Boolean,
-    board: Object,
+    board: null,
+    cardId: null,
   },
   components: {
     BoardLabel,
@@ -77,7 +79,7 @@ export default {
     };
   },
   methods: {
-    closeDialog: function (event) {
+    closeDialog: function () {
       this.$emit("visibility-change", false);
     },
 
@@ -98,6 +100,22 @@ export default {
             .post(`/boards/${this.board.id}/labels`, {text: text, color: color})
       
     },
+
+    labelSelected(label) {
+      console.log(this.cardId)
+      if(this.cardId != null) {
+        this.addLabelToCard(this.cardId, label.id)
+      }
+    },
+
+    addLabelToCard(card_id, label_id) {
+      this.axios
+            .post(`/cards/${card_id}/labels`, {labelId: label_id})
+            .then(
+              () => this.closeDialog(), 
+              () => {}
+            )
+    }
 
   },
 };
