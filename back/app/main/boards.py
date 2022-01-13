@@ -195,3 +195,32 @@ def add_label(board_id):
     realtime.notify_board_changed(board_id)
 
     return {}, 200
+
+
+@main.route('/boards/<int:board_id>/labels/<int:label_id>', methods=['DELETE'])
+@auth.login_required
+def delete_label(board_id, label_id):
+    user = auth.current_user()
+
+    board = Board.query.filter_by(id=board_id).first()
+    if board is None:
+        return 'Board not found', 404
+
+    if not board.userHasAccess(user.id):
+        return 'User is not owner of this board', 403
+
+    label = Label.query.filter_by(id=label_id).first()
+    if not label:
+        return 'Label not found', 404
+
+    cards = Card.query.all()
+    for card in cards:
+        if label_id in card.labels:
+            card.labels.remove(label_id)
+            db.session.add(card)
+    db.session.delete(label)
+    db.session.commit()
+
+    realtime.notify_board_changed(board_id)
+
+    return {}, 200

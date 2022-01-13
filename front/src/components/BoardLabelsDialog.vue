@@ -1,7 +1,8 @@
 <template>
   <v-dialog max-width="600px" v-model="value" @click:outside="closeDialog">
     <v-container fluid class="grey lighten-3">
-      <h2>New Label</h2>
+      <h1 class="mb-3">Board labels</h1>
+      <h2>Add new</h2>
       <v-row>
         <v-col>
           <v-text-field
@@ -40,16 +41,16 @@
 
       <v-row>
         <v-col>
-          <h2>Existing Labels</h2>
+          <h2>Existing</h2>
         </v-col>
       </v-row>
 
       <v-row class="pa-2 pl-3">
-        <Label
+        <BoardLabel
           v-for="label in board.labels"
           :key="label.id"
           :label="label"
-          :closeable="false"
+          :board="board"
           />
       </v-row>
 
@@ -58,7 +59,7 @@
 </template>
 
 <script>
-import Label from "./Label.vue";
+import BoardLabel from "./BoardLabel.vue";
 
 export default {
   props: {
@@ -66,7 +67,7 @@ export default {
     board: Object,
   },
   components: {
-    Label,
+    BoardLabel,
   },
   data() {
     return {
