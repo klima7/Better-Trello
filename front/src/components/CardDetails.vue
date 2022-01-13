@@ -28,18 +28,23 @@
 
       <!-- title -->
       <v-row class="mb-0">
-        <v-col v-if="!titleEdit" class="d-flex pb-2">
-          <v-icon style="vertical-align: baseline" color="black"
-            >mdi-card-text-outline</v-icon
-          >
-          <span class="ml-2 text-h6">{{ card.title }}</span>
-          <v-btn icon class="ml-0" @click="titleEditClicked()">
-            <v-icon color="black">mdi-pencil</v-icon>
-          </v-btn>
+        <v-col v-if="!titleEdit" class="d-flex pb-2 justify-space-between">
+          <div>
+            <v-icon style="vertical-align: baseline" color="black"
+              >mdi-card-text-outline</v-icon
+            >
+            <span class="ml-2 text-h6">{{ card.title }}</span>
+            <v-btn icon class="ml-0" @click="titleEditClicked()">
+              <v-icon color="black">mdi-pencil</v-icon>
+            </v-btn>
+          </div>
           <!-- Archive button -->
-          <v-btn icon class="ml-0" @click="archiveAddClicked()">
-            <v-icon color="black">mdi-archive-plus</v-icon>
-          </v-btn>
+          <div>
+            <v-btn text class="ml-0" @click="archiveAddClicked()" color="black">
+              <v-icon color="black">mdi-archive-plus</v-icon>
+              Archive
+            </v-btn>
+          </div>
         </v-col>
         <v-col v-else class="d-flex">
           <v-icon style="vertical-align: baseline" color="black"
@@ -90,11 +95,10 @@
           <span class="text-h6 ml-2">Description</span>
           <v-btn
             v-if="!descriptionEdit"
-            small
-            class="mx-2"
+            icon class="ml-0"
             @click="descriptionEditClicked()"
           >
-            Edit
+            <v-icon color="black">mdi-pencil</v-icon>
           </v-btn>
         </v-col>
       </v-row>

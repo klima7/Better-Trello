@@ -28,7 +28,12 @@
 					</v-form>
 				</v-row>
 				<v-row v-if="!comment_edit && userowned">
-					<v-btn text small color="primary" @click="edit">Edit</v-btn>
+					<v-btn
+            icon class="ml-0"
+            @click="edit()"
+          >
+            <v-icon color="black">mdi-pencil</v-icon>
+          </v-btn>
 					<!-- <v-btn text small color="primary" @click="deleteComment">Delete</v-btn> -->
 					<v-dialog
 						v-model="delete_confirm"
@@ -39,10 +44,9 @@
 							<v-btn 
 								v-on="on"
 								v-bind="attrs"
-								color="primary"
-								class="ml-2"
-								small 
-								text>Delete</v-btn>
+								icon>
+									<v-icon color="black">mdi-delete</v-icon>
+								</v-btn>
 						</template>
 						<v-card>
 							<v-card-title>
