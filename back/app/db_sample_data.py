@@ -10,7 +10,7 @@ def add_sample_data():
     Board.query.delete()
 
     # GROCERY LIST TEST BOARD
-    card1 = Card(order=0, title='Herbs & Spices', description='Basil, Oregano, Coriander, Cumin', labels=[1, 1, 1, 1, 1, 1])
+    card1 = Card(order=0, title='Herbs & Spices', description='Basil, Oregano, Coriander, Cumin')
     card2 = Card(order=0, title='Breakfast cereal', description='Porridge oats, Unsweetened gransola')
     card3 = Card(order=1, title='Oily fish', description='Tuna, Salmon, Mackerel')
     card4 = Card(order=0, title='Pulses', description='Red kidney beans, White beans, Green lentils')

@@ -2,9 +2,16 @@
   <div class="px-6">
     <div class="d-flex justify-start">
       <BoardName :board="board" />
-      <v-btn icon @click="toggleArchived()">
-        <v-icon color="black">mdi-archive</v-icon>
+      <div class="d-flex mt-2">
+      <v-btn text @click="showLabelsDialog(null)" color="black">
+        <v-icon color="black">mdi-label</v-icon>
+        Board labels
       </v-btn>
+      <v-btn text @click="toggleArchived()" color="black">
+        <v-icon color="black">mdi-archive</v-icon>
+        Archive
+      </v-btn>
+      </div>
     </div>
     <div class="d-flex flex-row">
       <draggable
