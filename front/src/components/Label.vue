@@ -37,13 +37,18 @@ export default {
   methods: {
     delete_clicked: function(event) {
       console.log("Delete clicked");
-      this.delete_in_frontend();
+      this.deleteInFrontend()
+      this.deleteInBackend(this.card.id, this.label.id);
     },
-    delete_in_frontend: function() {
+    deleteInFrontend: function() {
       var index = this.card.labels.indexOf(this.label);
       if (index !== -1) {
         this.card.labels.splice(index, 1);
       }
+    },
+    deleteInBackend: function(cardId, labelId) {
+      this.axios
+            .delete(`/cards/${cardId}/labels/${labelId}`)
     }
   }
 };
