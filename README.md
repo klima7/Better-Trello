@@ -1,4 +1,4 @@
-# Trello Sierra
+# Better Trello
 Web application that is meant to implement basic functionlity found in list-making application Trello.
 
 ## Environment setup
