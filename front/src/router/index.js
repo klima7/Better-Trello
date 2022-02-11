@@ -65,7 +65,7 @@ const routes = [
 
 Vue.router = new VueRouter({
   mode: "history",
-  base: "/Trello-Sierra/",
+  base: "/Better-Trello/",
   routes,
 });
 
